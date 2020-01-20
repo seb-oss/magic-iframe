@@ -81,7 +81,6 @@ export class MagicIframe {
 
   @Watch('loaded')
   loadedHandler(newValue: boolean, oldValue: boolean) {
-    console.log(newValue, oldValue);
     if(newValue){
 
       // prevent overflow for iframe body
@@ -123,9 +122,6 @@ export class MagicIframe {
     this.magicIframeEvent.emit(event);
   }
 
-  getSource() {
-    return this.source;
-  }
   onIframeLoad($event: any) {
     this.loaded = true;
   }
@@ -146,7 +142,7 @@ export class MagicIframe {
               { this.loading ?
                 <div class="seb-iframe-loading"><slot></slot></div> : ''
               }
-              <iframe src={this.getSource()}
+              <iframe src={this.source}
                       ref={(el) => this.iframe = el as HTMLIFrameElement}
                       class="seb-iframe"
                       frameborder="0"
