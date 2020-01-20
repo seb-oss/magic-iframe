@@ -87,12 +87,8 @@
                   <input type="checkbox" class="custom-control-input" id="autoResize_checkbox" onclick="toggleAutoResize()">
                   <label class="custom-control-label" for="autoResize_checkbox">Auto resize</label>
                 </div>
-                <!--<div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="matchContentWidth_checkbox" formControlName="matchContentWidth">
-                    <label class="custom-control-label" for="matchContentWidth_checkbox">Match iframe content width</label>
-                </div>-->
                 <div class="custom-control custom-checkbox" [ngbTooltip]="'Zoom/resize iframe content to fit size of magic iframe.'" [container]="'body'">
-                  <input type="checkbox" class="custom-control-input" id="resizeContent_checkbox" formControlName="resizeContent">
+                  <input type="checkbox" class="custom-control-input" id="resizeContent_checkbox" onclick="toggleResizeContent()">
                   <label class="custom-control-label" for="resizeContent_checkbox">Resize content</label>
                 </div>
               </div>
@@ -180,7 +176,6 @@
     const magicIframe = document.getElementById('magicIframe');
 
     magicIframe.addEventListener('magicIframeEvent', ($event) => console.log($event.detail.event));
-    magicIframe.resizeContent =  true;
     // magicIframe.styleUrls = ['./css/external-stylesheet.css', './css/fonts.css'];
     let src = '/assets/fluid-page.html';
     function toggleSource() {
@@ -218,7 +213,15 @@
     function toggleAutoResize() {
         magicIframe.autoResize = !magicIframe.autoResize;
     }
+
+    const resizeContentCheckbox = document.getElementById('resizeContent_checkbox');
+    resizeContentCheckbox.checked = true;
+    function toggleResizeContent() {
+        magicIframe.resizeContent = !magicIframe.resizeContent;
+        console.log(magicIframe.resizeContent)
+    }
     toggleAutoResize();
+    toggleResizeContent();
     toggleInlineStyles();
     toggleStyles();
 </script>
