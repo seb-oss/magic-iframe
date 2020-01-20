@@ -197,17 +197,33 @@ export class MagicIframe {
   }
 
   private addCss() {
-    if(this.styles) {
+    // if styles are defined...
+    if(this.styles && this.styles.length > 0) {
+      // check if style element has been created...
       if (!this._styleElement) {
+        // ...if not create it
         this._styleElement = this.iframe.contentDocument.createElement('style');
+        // ..and give it a unique id so that we can remove it later on
+        this._styleElement.setAttribute('id', 'sebMagicIframeStyles');
+        // ...add styles to the created node
+        this._styleElement.appendChild(this.iframe.contentDocument.createTextNode(this.styles));
+      } else {
+        // ...if style element exists, replace the content with new styles
+        this._styleElement.innerText = this.styles;
       }
-      this._styleElement.setAttribute('id', 'sebMagicIframeStyles');
-      this._styleElement.appendChild(this.iframe.contentDocument.createTextNode(this.styles));
+      // add element to DOM
       this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(this._styleElement);
       this.magicIframeEventHandler('iframe-styles-added', {styles: this.styles});
-    } else if(this._styleElement) {
-      const styleElement = this.iframe.contentDocument.getElementById('sebMagicIframeStyles');
+    } else
+      // if no styles are passed and style element exists...
+      if(this._styleElement) {
+      // ...get style element inside iframe
+      let styleElement = this.iframe.contentDocument.getElementById('sebMagicIframeStyles');
+      // ...remove style element from DOM
       styleElement.parentNode.removeChild(styleElement);
+      // ...clear styleElement
+      this._styleElement = null;
+      styleElement = null;
       this.magicIframeEventHandler('iframe-styles-removed', {styles: this.styles});
 
     }
