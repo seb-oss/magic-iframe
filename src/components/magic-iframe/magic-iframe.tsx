@@ -125,8 +125,8 @@ export class MagicIframe {
   onIframeLoad($event: any) {
     this.loaded = true;
   }
-  @State() loaded: boolean;
-  @State() loading: boolean;
+  @State() loaded: boolean = false;
+  @State() loading: boolean = true;
 
   private _previousScale: number;
   private _scale: number = 1;
