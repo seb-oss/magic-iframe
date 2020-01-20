@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>SEB Magic Iframe</title>
-  <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/light.css" integrity="sha384-33RmjeesW9BZ4wR2Gm3n4iBXOvGTto4znqL2kZleiRanWDxM59IHIq5RsbRioqxb" crossorigin="anonymous">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-srL3Qh9R/n855m4o5fegS//B2q0R1md7z6ndDYaPj8iEp0j0IuKdFVWMY0JosKPF" crossorigin="anonymous">
 
@@ -58,7 +58,7 @@
           </seb-ng-magic-iframe>-->
           <seb-magic-iframe
             id="magicIframe"
-            source="/fluid-page.html">
+            source="/assets/fluid-page.html">
             <div class="skeleton-loader"></div>
           </seb-magic-iframe>
         </div>
@@ -159,7 +159,7 @@
           <p class="mb-0 lead">Normal, boring, old iframe that won't resize or let you know what's happening inside. The height is fixed by default so unless you update it manually it will get scrollbars when iframe content is taller than the iframe.</p>
         </div>
         <div class="card-body" id="normalIframe">
-          <iframe src="/fluid-page.html" frameborder="0" style="width: 100%" height="200"></iframe>
+          <iframe src="/assets/fluid-page.html" frameborder="0" style="width: 100%" height="200"></iframe>
         </div>
         <div class="card-footer">
           <p>Nothing special going on here but just as reference, this is how you'd normally add an iframe.</p>
@@ -182,17 +182,17 @@
     magicIframe.addEventListener('magicIframeEvent', ($event) => console.log($event.detail.event));
     magicIframe.resizeContent =  true;
     // magicIframe.styleUrls = ['./css/external-stylesheet.css', './css/fonts.css'];
-    let src = '/fluid-page.html';
+    let src = '/assets/fluid-page.html';
     function toggleSource() {
         switch (src) {
-            case '/fluid-page.html':
-                src = '/fixed-width-page.html';
+            case '/assets/fluid-page.html':
+                src = '/assets/fixed-width-page.html';
                 break;
-            case '/fixed-width-page.html':
-                src = '/responsive-page.html';
+            case '/assets/fixed-width-page.html':
+                src = '/assets/responsive-page.html';
                 break;
-            case '/responsive-page.html':
-                src = '/fluid-page.html';
+            case '/assets/responsive-page.html':
+                src = '/assets/fluid-page.html';
                 break;
         }
         magicIframe.source = src;
