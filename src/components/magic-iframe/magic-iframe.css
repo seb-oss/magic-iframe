@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  position: relative;
+  -webkit-overflow-scrolling:touch;
+}
+.seb-iframe {
+  overflow: hidden;
+  min-width: 100%;
+  width: 100px;
+  *width: 100%;
+}
+.seb-iframe-loading {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+}
+.seb-iframe-loading::after {
+  background: #fff;
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+  left: 0;
+}

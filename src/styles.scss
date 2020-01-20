@@ -1,0 +1,58 @@
+$seb-font-path: '../fonts';
+@import "~@sebgroup/bootstrap/scss/bootstrap";
+
+code {
+  color: $blue;
+}
+.skeleton-loader {
+  background: #fff;
+}
+.skeleton-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.skeleton-loader::after {
+  max-width: 1040px;
+  max-height: 320px;
+}
+
+.github-ribbon-wrapper {
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 250px;
+  height: 250px;
+}
+.github-ribbon {
+  background: $green;
+  padding: 1rem;
+  transform: rotate(45deg);
+  right: -60px;
+  top: 40px;
+  width: 250px;
+  text-align: center;
+  display: inline-block;
+  position: absolute;
+  color: $white;
+  z-index: 1;
+  &:hover {
+    color: $white;
+  }
+}
+.github-ribbon-wrapper + .navbar-text {
+  margin-right: 180px;
+}
+
+.navbar {
+  height: 3.5rem;
+}
+
+seb-ng-magic-iframe {
+  overflow-x: auto;
+  display: block;
+  position: relative;
+}

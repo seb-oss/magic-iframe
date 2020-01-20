@@ -1,0 +1,37 @@
+{
+  "name": "magic-iframe",
+  "version": "0.0.1",
+  "description": "Stencil Component Starter",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/magic-iframe/magic-iframe.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "build": "stencil build --docs",
+    "start": "concurrently \"stencil build --dev --watch --serve\" \"node-sass --watch --importer=node_modules/node-sass-tilde-importer src/styles.scss www/css/styles.css\"",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "generate": "stencil generate"
+  },
+  "devDependencies": {
+    "@stencil/core": "^1.8.4",
+    "concurrently": "^5.0.2",
+    "node-sass": "^4.13.1",
+    "node-sass-tilde-importer": "^1.0.2",
+    "@types/element-resize-detector": "^1.1.2"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@sebgroup/bootstrap": "^5.1.0",
+    "element-resize-detector": "^1.2.1",
+    "rxjs": "^6.5.4"
+  }
+}
