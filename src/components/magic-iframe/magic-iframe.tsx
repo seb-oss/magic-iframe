@@ -47,8 +47,8 @@ export class MagicIframe {
 
   @Watch('resizeContent')
   resizeContentChangeHandler(newValue: boolean, oldValue: boolean) {
-    console.log(newValue);
     if(newValue !== oldValue){
+      this.scaleContent();
     }
   }
 
@@ -96,17 +96,7 @@ export class MagicIframe {
       this.addClickListener();
       this.addKeyUpListener();
 
-      if (this.resizeContent) {
-        this.scale();
-        if (!this._resizeListener) {
-          addEventListener('resize', ($event) => this.scale($event))
-        }
-      } else if (this._resizeListener)  {
-        this._resizeListener();
-        this._resizeListener = null;
-        this._previousScale = this._scale;
-        this._scale = 1;
-      }
+      this.scaleContent();
     } else {
       this.loading = true;
     }
@@ -131,7 +121,7 @@ export class MagicIframe {
   private _previousScale: number;
   private _scale: number = 1;
   private _hasBodyWidthRule = false;
-  private _resizeListener: Function;
+  private _resizeListener: EventListener;
   private _styleElement: HTMLStyleElement;
   private _stylesheets: Array<HTMLLinkElement> = [];
 
@@ -303,11 +293,24 @@ export class MagicIframe {
     }
   }
 
-  private scale(event?: Event) {
-    const zoom = this._previousScale && this._hasBodyWidthRule ?
-      this._previousScale : (this.iframe.clientWidth / this.iframe.contentDocument.body.offsetWidth);
-    this._previousScale = null;
-    this._scale = zoom > 1 ? 1 : zoom;
+  private scale(scale?: number) {
+    // scale isn't passed...
+    if (!scale) {
+      // ...set scale value to...
+      // 1. if previous zoom value and iframe has width rule set on body element: previous value
+      // 2. if no previous value: the relation between iframe width and the width of the iframe content
+      const scale = this._previousScale && this._hasBodyWidthRule ?
+        this._previousScale : (this.iframe.clientWidth / this.iframe.contentDocument.body.offsetWidth);
+      // reset previous scale value
+      this._previousScale = null;
+      // restrict scale to max 1
+      this._scale = scale > 1 ? 1 : scale;
+    } else {
+      // ...if scale value is passed, use it
+      this._previousScale = scale;
+      this._scale = scale;
+    }
+    // set style attribute for iframe body
     this.iframe.contentDocument.body.style.transformOrigin = 'top left';
     this.iframe.contentDocument.body.style.transform = 'scale3d(' + this._scale + ',' + this._scale + ',1)';
     this.updateSize();
@@ -325,6 +328,28 @@ export class MagicIframe {
   private removeElementResizeDetector() {
     if (this.iframe.contentDocument.body && erd) {
       erd.uninstall(this.iframe.contentDocument.body);
+    }
+  }
+
+  private scaleContent() {
+    // if resize content...
+    if (this.resizeContent) {
+      // ...scale iframe
+      this.scale();
+
+      // ...check if resize listener is defined...
+      if (!this._resizeListener) {
+        // ...if not add it
+        this._resizeListener = () => this.scale();
+        addEventListener('resize', this._resizeListener);
+      }
+    } else if (!this.resizeContent && this._resizeListener)  {
+      // remove event listener
+      removeEventListener('resize', this._resizeListener);
+      this._resizeListener = null;
+
+      // reset scale
+      this.scale(1);
     }
   }
 
