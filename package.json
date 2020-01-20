@@ -28,7 +28,7 @@
     "node-sass-tilde-importer": "^1.0.2",
     "@types/element-resize-detector": "^1.1.2"
   },
-  "license": "MIT",
+  "license": "Apache 2.0",
   "dependencies": {
     "@sebgroup/bootstrap": "^5.1.0",
     "element-resize-detector": "^1.2.1",
