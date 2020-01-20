@@ -27,13 +27,14 @@ export class MagicIframe {
   @Prop() styles: string;
   @Prop() styleUrls: Array<string>;
   @Prop() autoResize: boolean;
-  @Prop() resizeDebounceMillis: number;
+  @Prop() resizeDebounceMillis: number = 100;
+  @Prop() scaleDebounceMillis: number = 0;
   @Prop() matchContentWidth: boolean | 'auto';
-  @Prop() resizeContent: boolean;
+  @Prop() scaleContent: boolean;
   @Prop() height: string;
   @Prop() minWidth: string;
   @Prop() sanitizeSource: boolean;
-  @Prop() debug: string;
+  @Prop() debug: boolean;
 
 
   /**
@@ -45,10 +46,10 @@ export class MagicIframe {
     if(newValue !== oldValue){ this.loaded = false; }
   }
 
-  @Watch('resizeContent')
-  resizeContentChangeHandler(newValue: boolean, oldValue: boolean) {
+  @Watch('scaleContent')
+  scaleContentChangeHandler(newValue: boolean, oldValue: boolean) {
     if(newValue !== oldValue){
-      this.scaleContent();
+      this.scale();
     }
   }
 
@@ -96,7 +97,7 @@ export class MagicIframe {
       this.addClickListener();
       this.addKeyUpListener();
 
-      this.scaleContent();
+      this.scale();
     } else {
       this.loading = true;
     }
@@ -124,6 +125,7 @@ export class MagicIframe {
   private _resizeListener: EventListener;
   private _styleElement: HTMLStyleElement;
   private _stylesheets: Array<HTMLLinkElement> = [];
+  private _timeout: number;
 
 
   render() {
@@ -293,7 +295,7 @@ export class MagicIframe {
     }
   }
 
-  private scale(scale?: number) {
+  private setScale(scale?: number) {
     // scale isn't passed...
     if (!scale) {
       // ...set scale value to...
@@ -331,25 +333,31 @@ export class MagicIframe {
     }
   }
 
-  private scaleContent() {
+  private scale() {
     // if resize content...
-    if (this.resizeContent) {
+    if (this.scaleContent) {
       // ...scale iframe
-      this.scale();
+      this.setScale();
 
       // ...check if resize listener is defined...
       if (!this._resizeListener) {
         // ...if not add it
-        this._resizeListener = () => this.scale();
+        this._resizeListener = () => {
+          // clear timeout
+          clearTimeout(this._timeout);
+
+          // set timeout (resize complete event)
+          this._timeout = setTimeout(() => this.setScale(), this.scaleDebounceMillis);
+        };
         addEventListener('resize', this._resizeListener);
       }
-    } else if (!this.resizeContent && this._resizeListener)  {
+    } else if (!this.scaleContent && this._resizeListener)  {
       // remove event listener
       removeEventListener('resize', this._resizeListener);
       this._resizeListener = null;
 
       // reset scale
-      this.scale(1);
+      this.setScale(1);
     }
   }
 

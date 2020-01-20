@@ -26,13 +26,14 @@ export namespace Components {
   }
   interface SebMagicIframe {
     'autoResize': boolean;
-    'debug': string;
+    'debug': boolean;
     'height': string;
     'matchContentWidth': boolean | 'auto';
     'minWidth': string;
-    'resizeContent': boolean;
     'resizeDebounceMillis': number;
     'sanitizeSource': boolean;
+    'scaleContent': boolean;
+    'scaleDebounceMillis': number;
     /**
     * Properties
     */
@@ -79,14 +80,15 @@ declare namespace LocalJSX {
   }
   interface SebMagicIframe {
     'autoResize'?: boolean;
-    'debug'?: string;
+    'debug'?: boolean;
     'height'?: string;
     'matchContentWidth'?: boolean | 'auto';
     'minWidth'?: string;
     'onMagicIframeEvent'?: (event: CustomEvent<any>) => void;
-    'resizeContent'?: boolean;
     'resizeDebounceMillis'?: number;
     'sanitizeSource'?: boolean;
+    'scaleContent'?: boolean;
+    'scaleDebounceMillis'?: number;
     /**
     * Properties
     */
