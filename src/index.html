@@ -69,13 +69,13 @@
           <h4>Magic iframe options</h4>
           <form [formGroup]="magicControlsForm">
             <div class="row mb-3">
-              <div class="col-12 col-sm-auto">
+              <div class="col-12 col-sm-auto mb-3">
                 <label>Toggle options</label>
-                <div class="custom-control custom-checkbox" [ngbTooltip]="inlineTip" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-2" [ngbTooltip]="inlineTip" [container]="'body'">
                   <input type="checkbox" class="custom-control-input" id="inlineStyle_checkbox" onclick="toggleInlineStyles()">
                   <label class="custom-control-label" for="inlineStyle_checkbox">Apply inline styles</label>
                 </div>
-                <div class="custom-control custom-checkbox" [ngbTooltip]="'Inject external-stylesheet.css and fonts.css in iframe and emit event and show contents when external sources have finished loading.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Inject external-stylesheet.css and fonts.css in iframe and emit event and show contents when external sources have finished loading.'" [container]="'body'">
                   <input type="checkbox" class="custom-control-input" id="externalStyle_checkbox" onclick="toggleStyles()">
                   <label class="custom-control-label" for="externalStyle_checkbox">Apply external stylesheets (<a href="./assets/css/external-stylesheet.css" target="_blank">styles</a> and <a href="./assets/css/fonts.css" target="_blank">font</a>)</label>
                 </div>
@@ -83,20 +83,29 @@
                   <input type="checkbox" class="custom-control-input" id="showSkeletonLoader_checkbox" formControlName="showSkeletonLoader">
                   <label class="custom-control-label" for="showSkeletonLoader_checkbox">Show custom loader</label>
                 </div>-->
-                <div class="custom-control custom-checkbox" [ngbTooltip]="'Resize iframe when content inside iframe changes height.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Resize iframe when content inside iframe changes height.'" [container]="'body'">
                   <input type="checkbox" class="custom-control-input" id="autoResize_checkbox" onclick="toggleAutoResize()">
                   <label class="custom-control-label" for="autoResize_checkbox">Auto resize</label>
                 </div>
-                <div class="custom-control custom-checkbox" [ngbTooltip]="'Zoom/scale iframe content to fit size of magic iframe.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Zoom/scale iframe content to fit size of magic iframe.'" [container]="'body'">
                   <input type="checkbox" class="custom-control-input" id="scaleContent_checkbox" onclick="toggleScaleContent()">
                   <label class="custom-control-label" for="scaleContent_checkbox">Scale content</label>
                 </div>
               </div>
-              <div class="col-12 col-sm-auto mt-3 mt-sm-0">
+              <div class="col-12 col-sm-auto">
                 <div class="form-group" [ngbTooltip]="'Debounce time for resize detection of iframe content height.'" [container]="'body'">
                   <label for="resizeDebounceMillis_input">Resize debounce milliseconds</label>
                   <div class="input-group mb-3">
-                    <input type="number" class="form-control" id="resizeDebounceMillis_input" aria-label="Resize debounce milliseconds" formControlName="resizeDebounceMillis">
+                    <input type="number" class="form-control" id="resizeDebounceMillis_input" aria-label="Resize debounce milliseconds" onkeyup="updateResizeDebounce()">
+                    <div class="input-group-append">
+                      <span class="input-group-text">ms</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" [ngbTooltip]="'Debounce time for scale execution.'" [container]="'body'">
+                  <label for="scaleDebounceMillis_input">Scale debounce milliseconds</label>
+                  <div class="input-group mb-3">
+                    <input type="number" class="form-control" id="scaleDebounceMillis_input" aria-label="Scale debounce milliseconds" onkeyup="updateScaleDebounce()">
                     <div class="input-group-append">
                       <span class="input-group-text">ms</span>
                     </div>
@@ -105,22 +114,22 @@
                 <div class="form-group">
                   <label for="matchContent_radio" [ngbTooltip]="'Set min width for magic iframe based on iframe content width. Works best with layouts using fixed width.'" [container]="'body'">Match width of iframe content</label>
                   <div class="row">
-                    <div class="col-12 col-md-auto mb-2 mb-md-0">
+                    <div class="col-12 col-md-auto mt-2 mt-md-0 mb-3 mb-md-0">
                       <div class="custom-control custom-radio">
-                        <input type="radio" name="matchContentWidth" [value]="true" class="custom-control-input" id="matchContent_radio" formControlName="matchContentWidth">
-                        <label class="custom-control-label" for="matchContent_radio">True</label>
+                        <input type="radio" name="matchContentWidth" value="'auto'" class="custom-control-input" id="matchContent_radio_2" onclick="changeMatchContentWidth()">
+                        <label class="custom-control-label" for="matchContent_radio_2">Auto</label>
                       </div>
                     </div>
-                    <div class="col-12 col-md-auto mb-2 mb-md-0">
+                    <div class="col-12 col-md-auto mb-3 mb-md-0">
                       <div class="custom-control custom-radio">
-                        <input type="radio" name="matchContentWidth" [value]="false" class="custom-control-input" id="matchContent_radio_1" formControlName="matchContentWidth">
-                        <label class="custom-control-label" for="matchContent_radio_1">False</label>
+                        <input type="radio" name="matchContentWidth" value="true" class="custom-control-input" id="matchContent_radio" onclick="changeMatchContentWidth()">
+                        <label class="custom-control-label" for="matchContent_radio">True</label>
                       </div>
                     </div>
                     <div class="col-12 col-md-auto">
                       <div class="custom-control custom-radio">
-                        <input type="radio" name="matchContentWidth" [value]="'auto'" class="custom-control-input" id="matchContent_radio_2" formControlName="matchContentWidth">
-                        <label class="custom-control-label" for="matchContent_radio_2">Auto</label>
+                        <input type="radio" name="matchContentWidth" value="false" class="custom-control-input" id="matchContent_radio_1" onclick="changeMatchContentWidth()">
+                        <label class="custom-control-label" for="matchContent_radio_1">False</label>
                       </div>
                     </div>
                   </div>
@@ -187,6 +196,9 @@
                 src = '/assets/responsive-page.html';
                 break;
             case '/assets/responsive-page.html':
+                src = 'http://seb.se';
+                break;
+            case 'http://seb.se':
                 src = '/assets/fluid-page.html';
                 break;
         }
@@ -219,6 +231,26 @@
     function toggleScaleContent() {
         magicIframe.scaleContent = !magicIframe.scaleContent;
     }
+
+    const resizeDebounceMillis_input = document.getElementById('resizeDebounceMillis_input');
+    resizeDebounceMillis_input.value = 0;
+    function updateResizeDebounce() {
+        magicIframe.resizeDebounce = resizeDebounceMillis_input.value;
+    }
+
+    const scaleDebounceMillis_input = document.getElementById('scaleDebounceMillis_input');
+    scaleDebounceMillis_input.value = 0;
+    function updateScaleDebounce() {
+        magicIframe.scaleDebounce = scaleDebounceMillis_input.value;
+    }
+    const matchContentWidthRadioButtons = document.getElementsByName('matchContentWidth');
+    matchContentWidthRadioButtons[0].checked = true;
+
+    function changeMatchContentWidth() {
+        const value = Array.from(matchContentWidthRadioButtons).find(radio => radio.checked).value;
+        magicIframe.matchContentWidth = value === "'auto'" ? 'auto' : value === 'true';
+    }
+
     toggleAutoResize();
     toggleScaleContent();
     toggleInlineStyles();
