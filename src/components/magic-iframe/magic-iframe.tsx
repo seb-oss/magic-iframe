@@ -26,15 +26,15 @@ export class MagicIframe {
   @Prop() source: string;
   @Prop() styles: string;
   @Prop() styleUrls: Array<string>;
-  @Prop() autoResize: boolean;
-  @Prop() resizeDebounceMillis: number = 100;
-  @Prop() scaleDebounceMillis: number = 0;
-  @Prop() matchContentWidth: boolean | 'auto';
-  @Prop() scaleContent: boolean;
+  @Prop() autoResize: boolean = true;
+  @Prop() resizeDebounce: number = 0;
+  @Prop() scaleDebounce: number = 0;
+  @Prop() matchContentWidth: boolean | 'auto' = false;
+  @Prop() scaleContent: boolean = true;
   @Prop() height: string;
   @Prop() minWidth: string;
-  @Prop() sanitizeSource: boolean;
-  @Prop() debug: boolean;
+  @Prop() sanitizeSource: boolean = true;
+  @Prop() debug: boolean = false;
 
 
   /**
