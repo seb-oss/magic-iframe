@@ -49,6 +49,11 @@ export class MagicIframe {
   scaleContentChangeHandler(newValue: boolean, oldValue: boolean) {
     if(newValue !== oldValue){
       this.scale();
+      // scale content is true...
+      if(newValue) {
+        // ...set match content width to false (we can't match and scale at the same time).
+        this.matchContentWidth = false;
+      }
     }
   }
 
@@ -79,12 +84,23 @@ export class MagicIframe {
     }
   }
 
+  @Watch('matchContentWidth')
+  matchContentWidthChangeHandler(newValue: boolean, oldValue: boolean) {
+    if(newValue !== oldValue) {
+      this.hasBodyWidthRule();
+    }
+  }
+
   @Watch('loaded')
   loadedHandler(newValue: boolean, oldValue: boolean) {
     if(newValue){
 
       // prevent overflow for iframe body
-      this.preventOverflow();
+      const error = this.preventOverflow();
+      if(error) {
+        return;
+      }
+      this.magicIframeEventHandler('iframe-loaded', {event: this._loadEvent});
 
       this.addCss();
       // add external stylesheets
@@ -95,7 +111,6 @@ export class MagicIframe {
       this.addUnloadListener();
       this.addClickListener();
       this.addKeyUpListener();
-
       this.scale();
     } else {
       this.loading = true;
@@ -113,18 +128,21 @@ export class MagicIframe {
   }
 
   onIframeLoad($event: any) {
+    this._loadEvent = $event;
     this.loaded = true;
   }
   @State() loaded: boolean = false;
   @State() loading: boolean = true;
 
+  private _loadEvent: Event;
   private _previousScale: number;
   private _scale: number = 1;
   private _hasBodyWidthRule = false;
   private _resizeListener: EventListener;
   private _styleElement: HTMLStyleElement;
   private _stylesheets: Array<HTMLLinkElement> = [];
-  private _timeout: number;
+  private _resizeDebounceTimeout: number;
+  private _scaleDebounceTimeout: number;
 
 
   render() {
@@ -146,11 +164,15 @@ export class MagicIframe {
 
   private addElementResizeDetector(body: HTMLElement, style: any) {
     erd.listenTo(body, () => {
-      this.updateSize(body, style);
+      // clear timeout
+      clearTimeout(this._resizeDebounceTimeout);
+
+      // set timeout (resize complete event)
+      this._resizeDebounceTimeout = setTimeout(() => this.updateSize(style), this.resizeDebounce);
     });
   }
 
-  private updateSize(body?: HTMLElement, style?: any) {
+  private updateSize(style?: any) {
     const computedStyle =  style || this.iframe.contentWindow.getComputedStyle(this.iframe.contentDocument.body);
     const offsetHeight = this.iframe.contentDocument.body.offsetHeight;
     const marginTop = parseInt(computedStyle.getPropertyValue('margin-top'), 10);
@@ -158,28 +180,28 @@ export class MagicIframe {
     const height = (offsetHeight + marginTop + marginBottom) * this._scale;
     const width = this.iframe.contentDocument.body.offsetWidth;
     this.iframe.style.height = `${height}px`;
-    // this.iframe.style.minWidth = `${width}px`;
-    // const iframeSize = {height: height * this._scale + 'px', minWidth: width + 'px'};
-    // this.$iframeSize.next(iframeSize);
+    if((this.matchContentWidth !== false && this._hasBodyWidthRule && width && !this.scaleContent) || this.minWidth) {
+      this.iframe.style.minWidth = this.minWidth || `${width}px`;
+    } else {
+      this.iframe.style.minWidth = '100%';
+    }
   }
 
   private addUnloadListener() {
     this.iframe.contentWindow.addEventListener('unload',($event: Event) => {
       this.loaded = false;
       this.iframe.contentDocument.body.style.overflow = 'hidden';
-      this.magicIframeEventHandler('unload', $event)
-
-
+      this.magicIframeEventHandler('iframe-unloaded', $event)
     });
   }
   private addClickListener() {
     this.iframe.contentDocument.addEventListener('click',($event: MouseEvent) => {
-      this.magicIframeEventHandler('click', $event)
+      this.magicIframeEventHandler('iframe-click', $event)
     });
   }
   private addKeyUpListener() {
     this.iframe.contentDocument.addEventListener('keyup',($event: KeyboardEvent) => {
-      this.magicIframeEventHandler('keyup', $event)
+      this.magicIframeEventHandler('iframe-keyup', $event)
     });
   }
 
@@ -215,11 +237,20 @@ export class MagicIframe {
 
     }
   }
-  private preventOverflow() {
-    const styleElement = this.iframe.contentDocument.createElement('style');
-    this.styleElement = styleElement;
-    styleElement.appendChild(this.iframe.contentDocument.createTextNode('html { overflow: hidden; }'));
-    this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(styleElement);
+  private preventOverflow(): boolean {
+    try {
+      const styleElement = this.iframe.contentDocument.createElement('style');
+      this.styleElement = styleElement;
+      styleElement.appendChild(this.iframe.contentDocument.createTextNode('html { overflow: hidden; }'));
+      this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(styleElement);
+      return false;
+    } catch (error) {
+      console.log('Event listeners and/or styles and resize listener could not be added due to a cross-origin frame error.');
+      console.warn(error);
+      this.magicIframeEventHandler('iframe-loaded-with-error', {error});
+      this.loading = false;
+      return true;
+    }
   }
 
   private addStyleSheets() {
@@ -316,8 +347,8 @@ export class MagicIframe {
     this.iframe.contentDocument.body.style.transform = 'scale3d(' + this._scale + ',' + this._scale + ',1)';
     this.updateSize();
 
-    // emit content resized event
-    this.magicIframeEventHandler('iframe-content-resized', {scale: this._scale});
+    // emit content scale event
+    this.magicIframeEventHandler('iframe-content-scaled', {scale: this._scale});
   }
 
   private filterCssRuleBodyWidth(cssRule: CSSRule) {
@@ -343,10 +374,10 @@ export class MagicIframe {
         // ...if not add it
         this._resizeListener = () => {
           // clear timeout
-          clearTimeout(this._timeout);
+          clearTimeout(this._scaleDebounceTimeout);
 
           // set timeout (resize complete event)
-          this._timeout = setTimeout(() => this.setScale(), this.scaleDebounceMillis);
+          this._scaleDebounceTimeout = setTimeout(() => this.setScale(), this.scaleDebounce);
         };
         addEventListener('resize', this._resizeListener);
       }
@@ -363,6 +394,7 @@ export class MagicIframe {
   private hasBodyWidthRule() {
     if (this.matchContentWidth !== 'auto') {
       this._hasBodyWidthRule = this.matchContentWidth;
+      this.updateSize();
       return;
     }
     try {
@@ -379,6 +411,7 @@ export class MagicIframe {
         }, []);
       widthRule = [].concat.apply([], widthRule);
       this._hasBodyWidthRule = widthRule.length > 0;
+      this.updateSize();
     } catch (error) {
       console.log('Can\'t read css rules from stylesheet loaded from external domain.');
       console.warn(error);
