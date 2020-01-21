@@ -1,5 +1,6 @@
 import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/core';
 import elementResizeDetectorMaker from 'element-resize-detector';
+import {sanitizeUrl} from '@braintree/sanitize-url';
 import {forkJoin, Subject} from 'rxjs';
 
 const erd = elementResizeDetectorMaker({
@@ -144,6 +145,10 @@ export class MagicIframe {
   private _resizeDebounceTimeout: number;
   private _scaleDebounceTimeout: number;
 
+  getSafeSrc(): string {
+    return this.sanitizeSource ? sanitizeUrl(this.source) : this.source;
+  }
+
 
   render() {
     return <Host>
@@ -151,7 +156,7 @@ export class MagicIframe {
               { this.loading ?
                 <div class="seb-iframe-loading"><slot></slot></div> : ''
               }
-              <iframe src={this.source}
+              <iframe src={this.getSafeSrc()}
                       ref={(el) => this.iframe = el as HTMLIFrameElement}
                       class="seb-iframe"
                       frameborder="0"

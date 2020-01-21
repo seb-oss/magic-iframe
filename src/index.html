@@ -149,6 +149,7 @@
           <div class="btn-group w-100 pr-3 mt-3">
             <button class="btn btn-sm btn-light col" (click)="clearLog()">Clear log</button>
             <button class="btn btn-sm btn-light col" onclick="toggleSource()">Toggle source</button>
+            <button class="btn btn-sm btn-light col" onclick="injectMaliciousScript()">Inject malicious script</button>
             <button class="btn btn-sm btn-light col" (click)="reload()">Reload iframe</button>
           </div>
         </div>
@@ -249,6 +250,10 @@
     function changeMatchContentWidth() {
         const value = Array.from(matchContentWidthRadioButtons).find(radio => radio.checked).value;
         magicIframe.matchContentWidth = value === "'auto'" ? 'auto' : value === 'true';
+    }
+
+    function injectMaliciousScript() {
+        magicIframe.source = 'jAvasCrIPT:alert(document.domain)';
     }
 
     toggleAutoResize();

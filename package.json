@@ -31,6 +31,7 @@
   },
   "license": "Apache 2.0",
   "dependencies": {
+    "@braintree/sanitize-url": "^4.0.0",
     "@sebgroup/bootstrap": "^5.1.0",
     "element-resize-detector": "^1.2.1",
     "rxjs": "^6.5.4"
