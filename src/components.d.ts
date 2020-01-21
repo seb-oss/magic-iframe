@@ -30,10 +30,10 @@ export namespace Components {
     'height': string;
     'matchContentWidth': boolean | 'auto';
     'minWidth': string;
-    'resizeDebounceMillis': number;
+    'resizeDebounce': number;
     'sanitizeSource': boolean;
     'scaleContent': boolean;
-    'scaleDebounceMillis': number;
+    'scaleDebounce': number;
     /**
     * Properties
     */
@@ -85,10 +85,10 @@ declare namespace LocalJSX {
     'matchContentWidth'?: boolean | 'auto';
     'minWidth'?: string;
     'onMagicIframeEvent'?: (event: CustomEvent<any>) => void;
-    'resizeDebounceMillis'?: number;
+    'resizeDebounce'?: number;
     'sanitizeSource'?: boolean;
     'scaleContent'?: boolean;
-    'scaleDebounceMillis'?: number;
+    'scaleDebounce'?: number;
     /**
     * Properties
     */
