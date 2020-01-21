@@ -1,10 +1,9 @@
 import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/core';
 import elementResizeDetectorMaker from 'element-resize-detector';
-import {BehaviorSubject, forkJoin, fromEvent, Observable, ReplaySubject, Subject} from 'rxjs';
-// import {debounceTime, distinctUntilChanged, filter, map, skip, takeUntil, tap} from 'rxjs/operators';
+import {forkJoin, Subject} from 'rxjs';
 
 const erd = elementResizeDetectorMaker({
-  strategy: "scroll" //<- For ultra performance.
+  strategy: "scroll"
 });
 
 
