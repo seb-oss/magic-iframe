@@ -7,7 +7,9 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  MagicIframeEvent,
+} from './components/magic-iframe/magic-iframe-event.interface';
 
 export namespace Components {
   interface MyComponent {
@@ -84,7 +86,7 @@ declare namespace LocalJSX {
     'height'?: string;
     'matchContentWidth'?: boolean | 'auto';
     'minWidth'?: string;
-    'onMagicIframeEvent'?: (event: CustomEvent<any>) => void;
+    'onMagicIframeEvent'?: (event: CustomEvent<MagicIframeEvent>) => void;
     'resizeDebounce'?: number;
     'sanitizeSource'?: boolean;
     'scaleContent'?: boolean;

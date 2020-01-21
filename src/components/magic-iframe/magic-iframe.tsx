@@ -2,6 +2,7 @@ import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/cor
 import elementResizeDetectorMaker from 'element-resize-detector';
 import {sanitizeUrl} from '@braintree/sanitize-url';
 import {forkJoin, Subject} from 'rxjs';
+import {MagicIframeEvent} from "./magic-iframe-event.interface";
 
 const erd = elementResizeDetectorMaker({
   strategy: "scroll"
@@ -101,7 +102,7 @@ export class MagicIframe {
       if(error) {
         return;
       }
-      this.magicIframeEventHandler('iframe-loaded', {event: this._loadEvent});
+      this.magicIframeEventHandler({event:'iframe-loaded', details: this._loadEvent});
 
       this.addCss();
       // add external stylesheets
@@ -119,9 +120,8 @@ export class MagicIframe {
   }
 
   // @ts-ignore
-  @Event() magicIframeEvent: EventEmitter;
-  magicIframeEventHandler(eventType: any, details: any) {
-    const event: any = { event: eventType, details};
+  @Event() magicIframeEvent: EventEmitter<MagicIframeEvent>;
+  magicIframeEventHandler(event: MagicIframeEvent) {
     if (this.debug) {
       console.log(event);
     }
@@ -190,23 +190,25 @@ export class MagicIframe {
     } else {
       this.iframe.style.minWidth = '100%';
     }
+    this.magicIframeEventHandler({ event: 'iframe-resized', details: {width, height} });
+
   }
 
   private addUnloadListener() {
     this.iframe.contentWindow.addEventListener('unload',($event: Event) => {
       this.loaded = false;
       this.iframe.contentDocument.body.style.overflow = 'hidden';
-      this.magicIframeEventHandler('iframe-unloaded', $event)
+      this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
     });
   }
   private addClickListener() {
     this.iframe.contentDocument.addEventListener('click',($event: MouseEvent) => {
-      this.magicIframeEventHandler('iframe-click', $event)
+      this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
     });
   }
   private addKeyUpListener() {
     this.iframe.contentDocument.addEventListener('keyup',($event: KeyboardEvent) => {
-      this.magicIframeEventHandler('iframe-keyup', $event)
+      this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
     });
   }
 
@@ -227,7 +229,7 @@ export class MagicIframe {
       }
       // add element to DOM
       this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(this._styleElement);
-      this.magicIframeEventHandler('iframe-styles-added', {styles: this.styles});
+      this.magicIframeEventHandler({ event: 'iframe-styles-added', details: this.styles });
     } else
       // if no styles are passed and style element exists...
       if(this._styleElement) {
@@ -238,7 +240,7 @@ export class MagicIframe {
       // ...clear styleElement
       this._styleElement = null;
       styleElement = null;
-      this.magicIframeEventHandler('iframe-styles-removed', {styles: this.styles});
+      this.magicIframeEventHandler({ event: 'iframe-styles-removed', details: this.styles });
 
     }
   }
@@ -252,7 +254,7 @@ export class MagicIframe {
     } catch (error) {
       console.log('Event listeners and/or styles and resize listener could not be added due to a cross-origin frame error.');
       console.warn(error);
-      this.magicIframeEventHandler('iframe-loaded-with-error', {error});
+      this.magicIframeEventHandler({ event: 'iframe-loaded-with-errors', details: error});
       this.loading = false;
       return true;
     }
@@ -266,8 +268,7 @@ export class MagicIframe {
       for (var i = 0; i < stylesheets.length; i++) {
         stylesheets[i].parentNode.removeChild(stylesheets[i]);
       }
-      this.magicIframeEventHandler('iframe-stylesheets-removed', {styleUrls: this.styleUrls});
-
+      this.magicIframeEventHandler({ event: 'iframe-all-stylesheets-removed', details: this.styleUrls });
     }
 
     if (this.styleUrls && this.styleUrls.length > 0) {
@@ -294,7 +295,7 @@ export class MagicIframe {
         // listen to load event on link
         linkElement.addEventListener('load', () => {
           this.iframe.contentDocument.body.style.overflow = 'inherit';
-          this.magicIframeEventHandler('iframe-stylesheet-loaded', {styleUrl});
+          this.magicIframeEventHandler({ event: 'iframe-stylesheet-loaded', details: styleUrl});
           loadSubject.next(styleUrl);
           loadSubject.complete();
           return true;
@@ -307,7 +308,7 @@ export class MagicIframe {
         this.iframe.contentDocument.head.insertBefore(linkElement, this.styleElement);
 
         // emit load event
-        this.magicIframeEventHandler('iframe-stylesheet-load', {styleUrl});
+        this.magicIframeEventHandler({ event: 'iframe-stylesheet-load', details: styleUrl});
       });
 
       forkJoin(loadSubjects)
@@ -316,7 +317,7 @@ export class MagicIframe {
         )
         .subscribe(() => {
           if (this.styleUrls.length > 1) {
-            this.magicIframeEventHandler('iframe-all-stylesheets-loaded', {styleUrls: this.styleUrls});
+            this.magicIframeEventHandler({ event: 'iframe-all-stylesheets-loaded', details: this.styleUrls});
           }
           // check if body has width rule defined
           this.hasBodyWidthRule();
@@ -336,12 +337,12 @@ export class MagicIframe {
       // ...set scale value to...
       // 1. if previous zoom value and iframe has width rule set on body element: previous value
       // 2. if no previous value: the relation between iframe width and the width of the iframe content
-      const scale = this._previousScale && this._hasBodyWidthRule ?
+      const calculatedScale = this._previousScale && this._hasBodyWidthRule ?
         this._previousScale : (this.iframe.clientWidth / this.iframe.contentDocument.body.offsetWidth);
       // reset previous scale value
       this._previousScale = null;
       // restrict scale to max 1
-      this._scale = scale > 1 ? 1 : scale;
+      this._scale = calculatedScale > 1 ? 1 : calculatedScale;
     } else {
       // ...if scale value is passed, use it
       this._previousScale = scale;
@@ -352,8 +353,10 @@ export class MagicIframe {
     this.iframe.contentDocument.body.style.transform = 'scale3d(' + this._scale + ',' + this._scale + ',1)';
     this.updateSize();
 
-    // emit content scale event
-    this.magicIframeEventHandler('iframe-content-scaled', {scale: this._scale});
+    // emit content scale event if it has changed or been reset
+    if(scale || this._scale !== 1) {
+      this.magicIframeEventHandler({ event: 'iframe-content-scaled', details: this._scale});
+    }
   }
 
   private filterCssRuleBodyWidth(cssRule: CSSRule) {
