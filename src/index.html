@@ -138,11 +138,10 @@
             </div>
           </form>
         </div>
-        <div class="card-footer bg-dark pr-0" *ngIf="isActiveIframeTools && $events | async as events">
-          <h4 class="text-white mb-0">Magic iframe events: {{events.length}}</h4>
+        <div class="card-footer bg-dark pr-0" id="eventLog">
+          <h4 class="text-white mb-0"></h4>
           <div class="temp">
-            <code class="d-block scrollbar-dark" style="overflow: auto; max-height: 170px;">
-              <div *ngFor="let event of events"><strong class="mr-1">{{event.event + ':'}}</strong><span class="text-white">{{event.src}}</span> <i *ngIf="event.resource" class="text-muted"> {{event.resource}}</i></div>
+            <code class="d-block scrollbar-dark" style="overflow: auto; max-height: 170px;" id="logOutput">
             </code>
           </div>
           <span class="text-white"><strong>iframe source:</strong> {{activSrc}}</span>
@@ -169,7 +168,6 @@
         </div>
         <div class="card-footer">
           <p>Nothing special going on here but just as reference, this is how you'd normally add an iframe.</p>
-          <!--<exemplify [sources]="iframeSource"></exemplify>-->
         </div>
       </div>
     </div>
@@ -184,8 +182,20 @@
 </div>
 <script type="application/javascript">
     const magicIframe = document.getElementById('magicIframe');
+    const eventLogCounter = document.querySelector('#eventLog > h4');
+    const logOutput = document.getElementById('logOutput');
+    let logEntries = [];
 
-    magicIframe.addEventListener('magicIframeEvent', ($event) => console.log($event.detail.event));
+    function writeToLog(event) {
+        const entry = `<div><strong class="mr-1">${event.detail.event}:</strong><span class="text-white">${JSON.stringify(event.detail.details)}</span></div>`;
+        logEntries = [entry,...logEntries];
+        logOutput.innerHTML = logEntries.join('');
+        eventLogCounter.innerText = `Magic iframe event: ${logEntries.length}`
+
+
+    }
+
+    magicIframe.addEventListener('magicIframeEvent', ($event) => writeToLog($event));
     // magicIframe.styleUrls = ['./css/external-stylesheet.css', './css/fonts.css'];
     let src = '/assets/fluid-page.html';
     function toggleSource() {
