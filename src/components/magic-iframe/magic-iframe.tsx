@@ -93,7 +93,7 @@ export class MagicIframe {
 
   @Watch('loaded')
   loadedHandler(newValue: boolean, oldValue: boolean) {
-    if(newValue){
+    if(newValue !== oldValue && newValue){
 
       // prevent overflow for iframe body
       const error = this.preventOverflow();
