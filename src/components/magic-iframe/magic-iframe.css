@@ -2,6 +2,7 @@
   display: block;
   position: relative;
   -webkit-overflow-scrolling:touch;
+  overflow: auto;
 }
 .seb-iframe {
   overflow: hidden;
