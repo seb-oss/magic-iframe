@@ -285,7 +285,7 @@ export class MagicIframe {
         linkElement.setAttribute('data-seb-magic-iframe', 'true');
         linkElement['rel'] = 'stylesheet';
         linkElement['type'] = 'text/css';
-        linkElement['href'] = styleUrl;
+        linkElement['href'] = this.sanitizeSource ? sanitizeUrl(styleUrl) : styleUrl;
 
         // create load subject that will emit once the stylesheet has loaded
         const loadSubject: Subject<string> = new Subject<string>();
