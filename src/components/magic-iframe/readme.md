@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event              | Description | Type               |
-| ------------------ | ----------- | ------------------ |
-| `magicIframeEvent` |             | `CustomEvent<any>` |
+| Event              | Description | Type                            |
+| ------------------ | ----------- | ------------------------------- |
+| `magicIframeEvent` |             | `CustomEvent<MagicIframeEvent>` |
 
 
 ----------------------------------------------

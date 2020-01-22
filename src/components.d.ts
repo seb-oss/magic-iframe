@@ -12,20 +12,6 @@ import {
 } from './components/magic-iframe/magic-iframe-event.interface';
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
-  }
   interface SebMagicIframe {
     'autoResize': boolean;
     'debug': boolean;
@@ -48,38 +34,17 @@ export namespace Components {
 declare global {
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
-  };
-
   interface HTMLSebMagicIframeElement extends Components.SebMagicIframe, HTMLStencilElement {}
   var HTMLSebMagicIframeElement: {
     prototype: HTMLSebMagicIframeElement;
     new (): HTMLSebMagicIframeElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
     'seb-magic-iframe': HTMLSebMagicIframeElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
-  }
   interface SebMagicIframe {
     'autoResize'?: boolean;
     'debug'?: boolean;
@@ -100,7 +65,6 @@ declare namespace LocalJSX {
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
     'seb-magic-iframe': SebMagicIframe;
   }
 }
@@ -111,7 +75,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'my-component': LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
       'seb-magic-iframe': LocalJSX.SebMagicIframe & JSXBase.HTMLAttributes<HTMLSebMagicIframeElement>;
     }
   }
