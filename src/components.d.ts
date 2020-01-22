@@ -9,7 +9,7 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   MagicIframeEvent,
-} from './components/magic-iframe/magic-iframe-event.interface';
+} from './components/seb-magic-iframe/seb-magic-iframe-event.interface';
 
 export namespace Components {
   interface SebMagicIframe {

@@ -2,7 +2,7 @@ import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/cor
 import elementResizeDetectorMaker from 'element-resize-detector';
 import {sanitizeUrl} from '@braintree/sanitize-url';
 import {forkJoin, Subject} from 'rxjs';
-import {MagicIframeEvent} from "./magic-iframe-event.interface";
+import {MagicIframeEvent} from "./seb-magic-iframe-event.interface";
 
 const erd = elementResizeDetectorMaker({
   strategy: "scroll"
@@ -11,10 +11,10 @@ const erd = elementResizeDetectorMaker({
 
 @Component({
   tag: 'seb-magic-iframe',
-  styleUrl: 'magic-iframe.css',
+  styleUrl: 'seb-magic-iframe.css',
   shadow: true
 })
-export class MagicIframe {
+export class SebMagicIframe {
 
   iframe!: HTMLIFrameElement;
   styleElement: HTMLStyleElement;
@@ -36,7 +36,6 @@ export class MagicIframe {
   @Prop() minWidth: string;
   @Prop() sanitizeSource: boolean = true;
   @Prop() debug: boolean = false;
-
 
   /**
    * Watchers
