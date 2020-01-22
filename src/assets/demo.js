@@ -4,6 +4,8 @@ const logOutput = document.getElementById('logOutput');
 const activeSource = document.getElementById('activeSource');
 let logEntries = [];
 
+magicIframe.sanitizeSource = true;
+
 function writeToLog(event) {
   if(event.detail.event === 'iframe-loaded') {
     activeSource.innerHTML =`<strong>iframe source:</strong> ${event.target.source}`;
@@ -109,8 +111,14 @@ function changeMatchContentWidth() {
   magicIframe.matchContentWidth = value === "'auto'" ? 'auto' : value === 'true';
 }
 
+const sanitizeSource_checkbox = document.getElementById('sanitizeSource_checkbox');
+sanitizeSource_checkbox.checked = true;
+function toggleSanitation() {
+  magicIframe.sanitizeSource = !magicIframe.sanitizeSource;
+}
+
 function injectMaliciousScript() {
-  magicIframe.source = 'jAvasCrIPT:alert(document.domain)';
+  magicIframe.source = 'jAvasCrIPT:alert(`Some malicious code running on ` + document.domain)';
 }
 
 toggleAutoResize();

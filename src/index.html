@@ -91,6 +91,10 @@
                   <input type="checkbox" class="custom-control-input" id="scaleContent_checkbox" onclick="toggleScaleContent()">
                   <label class="custom-control-label" for="scaleContent_checkbox">Scale content</label>
                 </div>
+                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Sanitize source to prevent XSS attacks'" [container]="'body'">
+                  <input type="checkbox" class="custom-control-input" id="sanitizeSource_checkbox" onclick="toggleSanitation()">
+                  <label class="custom-control-label" for="sanitizeSource_checkbox">Sanitize source</label>
+                </div>
               </div>
               <div class="col-12 col-sm-auto">
                 <div class="form-group" [ngbTooltip]="'Debounce time for resize detection of iframe content height.'" [container]="'body'">
