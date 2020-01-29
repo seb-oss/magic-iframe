@@ -32,7 +32,7 @@ export class SebMagicIframe {
   @Prop() resizeDebounce: number = 0;
   @Prop() scaleDebounce: number = 0;
   @Prop() matchContentWidth: boolean | 'auto' = false;
-  @Prop() scaleContent: boolean = true;
+  @Prop() scaleContent: boolean = false;
   @Prop() height: string;
   @Prop() minWidth: string;
   @Prop() sanitizeSource: boolean = true;
@@ -280,6 +280,7 @@ export class SebMagicIframe {
   private preventOverflow(): boolean {
     try {
       const styleElement = this.iframe.contentDocument.createElement('style');
+      this.iframe.contentDocument.body.style.position = 'static';
       this.styleElement = styleElement;
       styleElement.appendChild(this.iframe.contentDocument.createTextNode('html { overflow: hidden; }'));
       this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(styleElement);
