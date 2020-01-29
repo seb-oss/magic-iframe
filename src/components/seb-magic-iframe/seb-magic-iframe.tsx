@@ -1,8 +1,9 @@
 import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/core';
 import elementResizeDetectorMaker from 'element-resize-detector';
 import {sanitizeUrl} from '@braintree/sanitize-url';
-import {forkJoin, Subject} from 'rxjs';
+import {forkJoin, fromEvent, Subject, Subscription, timer} from 'rxjs';
 import {MagicIframeEvent} from "./seb-magic-iframe-event.interface";
+import {debounce, take, takeUntil} from "rxjs/operators";
 
 const erd = elementResizeDetectorMaker({
   strategy: "scroll"
@@ -138,16 +139,15 @@ export class SebMagicIframe {
   private _previousScale: number;
   private _scale: number = 1;
   private _hasBodyWidthRule = false;
-  private _resizeListener: EventListener;
+  private _resizeListener: Subscription;
   private _styleElement: HTMLStyleElement;
   private _stylesheets: Array<HTMLLinkElement> = [];
   private _resizeDebounceTimeout: number;
-  private _scaleDebounceTimeout: number;
+  private _unsubscribe$ = new Subject<void>();
 
   getSafeSrc(): string {
     return this.sanitizeSource ? sanitizeUrl(this.source) : this.source;
   }
-
 
   render() {
     return <Host>
@@ -194,21 +194,46 @@ export class SebMagicIframe {
   }
 
   private addUnloadListener() {
-    this.iframe.contentWindow.addEventListener('unload',($event: Event) => {
-      this.loaded = false;
-      this.iframe.contentDocument.body.style.overflow = 'hidden';
-      this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
-    });
+    fromEvent(this.iframe.contentWindow, 'unload')
+      .pipe(
+        take(1),
+        takeUntil(this._unsubscribe$)
+      )
+      .subscribe(($event: Event) => {
+        this.loaded = false;
+        this.iframe.contentDocument.body.style.overflow = 'hidden';
+        this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
+      });
+    // this.iframe.contentWindow.addEventListener('unload',($event: Event) => {
+    //   this.loaded = false;
+    //   this.iframe.contentDocument.body.style.overflow = 'hidden';
+    //   this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
+    // });
   }
   private addClickListener() {
-    this.iframe.contentDocument.addEventListener('click',($event: MouseEvent) => {
-      this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
-    });
+    fromEvent(this.iframe.contentDocument, 'click')
+      .pipe(
+        takeUntil(this._unsubscribe$)
+      )
+      .subscribe(($event: Event) => {
+        this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
+      });
+    // this.iframe.contentDocument.addEventListener('click',($event: MouseEvent) => {
+    //   this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
+    // });
   }
   private addKeyUpListener() {
-    this.iframe.contentDocument.addEventListener('keyup',($event: KeyboardEvent) => {
-      this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
-    });
+
+    fromEvent(this.iframe.contentDocument, 'keyup')
+      .pipe(
+        takeUntil(this._unsubscribe$)
+      )
+      .subscribe(($event: Event) => {
+        this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
+      });
+    // this.iframe.contentDocument.addEventListener('keyup',($event: KeyboardEvent) => {
+    //   this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
+    // });
   }
 
   private addCss() {
@@ -273,7 +298,7 @@ export class SebMagicIframe {
     if (this.styleUrls && this.styleUrls.length > 0) {
 
       // create placeholder for subjects
-      const loadSubjects: Array<Subject<string>> = [];
+      let loadSubjects: Array<Subject<string>> = [];
 
       // loop through all style sheets...
       this.styleUrls.map((styleUrl: string) => {
@@ -289,19 +314,17 @@ export class SebMagicIframe {
 
         // create load subject that will emit once the stylesheet has loaded
         const loadSubject: Subject<string> = new Subject<string>();
-        loadSubjects.push(loadSubject);
+        loadSubjects = [...loadSubjects, loadSubject];
 
-        // listen to load event on link
-        linkElement.addEventListener('load', () => {
-          this.iframe.contentDocument.body.style.overflow = 'inherit';
-          this.magicIframeEventHandler({ event: 'iframe-stylesheet-loaded', details: styleUrl});
-          loadSubject.next(styleUrl);
-          loadSubject.complete();
-          return true;
+        fromEvent(linkElement, 'load')
+          .pipe(
+            take(1),
+            takeUntil(this._unsubscribe$)
+          ).subscribe(_ => {
+            this.magicIframeEventHandler({ event: 'iframe-stylesheet-loaded', details: styleUrl});
+            loadSubject.next(styleUrl);
+            loadSubject.complete();
         });
-
-        // push listener to array so that we can remove them later
-        // this.eventListeners.push(stylesheetLoadListener);
 
         // add link to iframe head
         this.iframe.contentDocument.head.insertBefore(linkElement, this.styleElement);
@@ -312,7 +335,8 @@ export class SebMagicIframe {
 
       forkJoin(loadSubjects)
         .pipe(
-          //takeUntil(this.$unsubscribe)
+          take(1),
+          takeUntil(this._unsubscribe$)
         )
         .subscribe(() => {
           if (this.styleUrls.length > 1) {
@@ -371,26 +395,23 @@ export class SebMagicIframe {
   }
 
   private scale() {
-    // if resize content...
+    // if scale content...
     if (this.scaleContent) {
       // ...scale iframe
       this.setScale();
 
       // ...check if resize listener is defined...
       if (!this._resizeListener) {
-        // ...if not add it
-        this._resizeListener = () => {
-          // clear timeout
-          clearTimeout(this._scaleDebounceTimeout);
-
-          // set timeout (resize complete event)
-          this._scaleDebounceTimeout = setTimeout(() => this.setScale(), this.scaleDebounce);
-        };
-        addEventListener('resize', this._resizeListener);
+        this._resizeListener = fromEvent(window, 'resize')
+          .pipe(
+            debounce(() => timer(this.scaleDebounce)),
+            takeUntil(this._unsubscribe$)
+          )
+          .subscribe(_ => this.setScale());
       }
     } else if (!this.scaleContent && this._resizeListener)  {
       // remove event listener
-      removeEventListener('resize', this._resizeListener);
+      this._resizeListener.unsubscribe();
       this._resizeListener = null;
 
       // reset scale
@@ -423,6 +444,12 @@ export class SebMagicIframe {
       console.log('Can\'t read css rules from stylesheet loaded from external domain.');
       console.warn(error);
     }
+  }
+
+  componentDidUnload() {
+    this.magicIframeEventHandler({ event: 'iframe-removed', details: this.iframe});
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
   }
 
 }

@@ -3,6 +3,7 @@ export interface MagicIframeEvent {
   details: any | MouseEvent | KeyboardEvent;
 }
 export type MagicIframeEventName = 'iframe-click'
+  | 'iframe-removed'
   | 'iframe-loaded'
   | 'iframe-loaded-with-errors'
   | 'iframe-unloaded'
