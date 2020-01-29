@@ -13,10 +13,11 @@
 | `debug`             | `debug`               |             | `boolean`           | `false`     |
 | `height`            | `height`              |             | `string`            | `undefined` |
 | `matchContentWidth` | `match-content-width` |             | `"auto" \| boolean` | `false`     |
+| `maxHeight`         | `max-height`          |             | `string`            | `'500vh'`   |
 | `minWidth`          | `min-width`           |             | `string`            | `undefined` |
 | `resizeDebounce`    | `resize-debounce`     |             | `number`            | `0`         |
 | `sanitizeSource`    | `sanitize-source`     |             | `boolean`           | `true`      |
-| `scaleContent`      | `scale-content`       |             | `boolean`           | `true`      |
+| `scaleContent`      | `scale-content`       |             | `boolean`           | `false`     |
 | `scaleDebounce`     | `scale-debounce`      |             | `number`            | `0`         |
 | `source`            | `source`              | Properties  | `string`            | `undefined` |
 | `styleUrls`         | --                    |             | `string[]`          | `undefined` |
