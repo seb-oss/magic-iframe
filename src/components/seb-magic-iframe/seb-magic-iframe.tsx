@@ -36,6 +36,7 @@ export class SebMagicIframe {
   @Prop() height: string;
   @Prop() minWidth: string;
   @Prop() sanitizeSource: boolean = true;
+  @Prop() maxHeight: string = '500vh';
   @Prop() debug: boolean = false;
 
   /**
@@ -184,6 +185,7 @@ export class SebMagicIframe {
     const height = (offsetHeight + marginTop + marginBottom) * this._scale;
     const width = this.iframe.contentDocument.body.offsetWidth;
     this.iframe.style.height = `${height}px`;
+    this.iframe.style.maxHeight = this.maxHeight;
     if((this.matchContentWidth !== false && this._hasBodyWidthRule && width && !this.scaleContent) || this.minWidth) {
       this.iframe.style.minWidth = this.minWidth || `${width}px`;
     } else {

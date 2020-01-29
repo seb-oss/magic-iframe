@@ -17,6 +17,7 @@ export namespace Components {
     'debug': boolean;
     'height': string;
     'matchContentWidth': boolean | 'auto';
+    'maxHeight': string;
     'minWidth': string;
     'resizeDebounce': number;
     'sanitizeSource': boolean;
@@ -50,6 +51,7 @@ declare namespace LocalJSX {
     'debug'?: boolean;
     'height'?: string;
     'matchContentWidth'?: boolean | 'auto';
+    'maxHeight'?: string;
     'minWidth'?: string;
     'onMagicIframeEvent'?: (event: CustomEvent<MagicIframeEvent>) => void;
     'resizeDebounce'?: number;
