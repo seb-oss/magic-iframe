@@ -23,11 +23,11 @@
     "generate": "stencil generate"
   },
   "devDependencies": {
-    "@stencil/core": "^1.8.4",
+    "@stencil/core": "^1.8.5",
+    "@types/element-resize-detector": "^1.1.2",
     "concurrently": "^5.0.2",
     "node-sass": "^4.13.1",
-    "node-sass-tilde-importer": "^1.0.2",
-    "@types/element-resize-detector": "^1.1.2"
+    "node-sass-tilde-importer": "^1.0.2"
   },
   "license": "Apache 2.0",
   "dependencies": {
