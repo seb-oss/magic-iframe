@@ -15,5 +15,6 @@ export type MagicIframeEventName = 'iframe-click'
   | 'iframe-all-stylesheets-loaded'
   | 'iframe-keyup'
   | 'iframe-content-scaled'
+  | 'iframe-title-change'
   | 'iframe-resized'
   | 'iframe-error';

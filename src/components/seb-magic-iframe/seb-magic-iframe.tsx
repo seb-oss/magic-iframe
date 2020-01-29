@@ -104,6 +104,11 @@ export class SebMagicIframe {
         return;
       }
       this.magicIframeEventHandler({event:'iframe-loaded', details: this._loadEvent});
+      const pageTitle = this.iframe.contentDocument.title;
+      if(pageTitle !== this.pageTitle) {
+        this.pageTitle = pageTitle;
+        this.magicIframeEventHandler({event: 'iframe-title-change', details: pageTitle});
+      }
 
       this.addCss();
       // add external stylesheets
@@ -135,6 +140,7 @@ export class SebMagicIframe {
   }
   @State() loaded: boolean = false;
   @State() loading: boolean = true;
+  @State() pageTitle: string = 'SEB Magic Iframe';
 
   private _loadEvent: Event;
   private _previousScale: number;
@@ -161,6 +167,7 @@ export class SebMagicIframe {
                       class="seb-iframe"
                       frameborder="0"
                       scrolling="no"
+                      title={this.pageTitle}
                       onLoad={ev => this.onIframeLoad(ev)}>
               </iframe>
             </div>
