@@ -241,23 +241,30 @@ export class SebMagicIframe {
       // check if style element has been created...
       if (!this._styleElement) {
         // ...if not create it
-        this._styleElement = this.iframe.contentDocument.createElement('style');
+        this._styleElement = document.createElement('style');
         // ..and give it a unique id so that we can remove it later on
         this._styleElement.setAttribute('id', 'sebMagicIframeStyles');
         // ...add styles to the created node
-        this._styleElement.appendChild(this.iframe.contentDocument.createTextNode(this.styles));
+        this._styleElement.appendChild(document.createTextNode(this.styles));
       } else {
         // ...if style element exists, replace the content with new styles
-        this._styleElement.innerText = this.styles;
+        try {this._styleElement.innerText = this.styles;} catch (e) {
+          // ...if not create it
+          this._styleElement = document.createElement('style');
+          // ..and give it a unique id so that we can remove it later on
+          this._styleElement.setAttribute('id', 'sebMagicIframeStyles');
+          // ...add styles to the created node
+          this._styleElement.appendChild(document.createTextNode(this.styles));
+        }
       }
       // add element to DOM
-      this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(this._styleElement);
+      this.iframe.contentWindow.document.getElementsByTagName('head')[0].appendChild(this._styleElement);
       this.magicIframeEventHandler({ event: 'iframe-styles-added', details: this.styles });
     } else
       // if no styles are passed and style element exists...
       if(this._styleElement) {
       // ...get style element inside iframe
-      let styleElement = this.iframe.contentDocument.getElementById('sebMagicIframeStyles');
+      let styleElement = this.iframe.contentWindow.document.getElementById('sebMagicIframeStyles');
       // ...remove style element from DOM
       styleElement.parentNode.removeChild(styleElement);
       // ...clear styleElement
@@ -269,11 +276,11 @@ export class SebMagicIframe {
   }
   private preventOverflow(): boolean {
     try {
-      const styleElement = this.iframe.contentDocument.createElement('style');
-      this.iframe.contentDocument.body.style.position = 'static';
+      const styleElement = this.iframe.contentWindow.document.createElement('style');
+      this.iframe.contentWindow.document.body.style.position = 'static';
       this.styleElement = styleElement;
-      styleElement.appendChild(this.iframe.contentDocument.createTextNode('html { overflow: hidden; }'));
-      this.iframe.contentDocument.getElementsByTagName('head')[0].appendChild(styleElement);
+      styleElement.appendChild(document.createTextNode('html { overflow: hidden; }'));
+      this.iframe.contentWindow.document.getElementsByTagName('head')[0].appendChild(styleElement);
       return false;
     } catch (error) {
       console.log('Event listeners and/or styles and resize listener could not be added due to a cross-origin frame error.');
@@ -289,10 +296,12 @@ export class SebMagicIframe {
     // remove stylesheets if present
     if(this._stylesheets && this._stylesheets.length > 0) {
       const stylesheets = this.iframe.contentDocument.head.querySelectorAll('link[data-seb-magic-iframe="true"]');
-      for (var i = 0; i < stylesheets.length; i++) {
-        stylesheets[i].parentNode.removeChild(stylesheets[i]);
+      if(stylesheets) {
+        for (let i = 0; i < stylesheets.length; i++) {
+          stylesheets[i].parentNode.removeChild(stylesheets[i]);
+        }
+        this.magicIframeEventHandler({ event: 'iframe-all-stylesheets-removed', details: this.styleUrls });
       }
-      this.magicIframeEventHandler({ event: 'iframe-all-stylesheets-removed', details: this.styleUrls });
     }
 
     if (this.styleUrls && this.styleUrls.length > 0) {
