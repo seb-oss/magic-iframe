@@ -213,11 +213,6 @@ export class SebMagicIframe {
         this.iframe.contentDocument.body.style.overflow = 'hidden';
         this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
       });
-    // this.iframe.contentWindow.addEventListener('unload',($event: Event) => {
-    //   this.loaded = false;
-    //   this.iframe.contentDocument.body.style.overflow = 'hidden';
-    //   this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
-    // });
   }
   private addClickListener() {
     fromEvent(this.iframe.contentDocument, 'click')
@@ -227,9 +222,6 @@ export class SebMagicIframe {
       .subscribe(($event: Event) => {
         this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
       });
-    // this.iframe.contentDocument.addEventListener('click',($event: MouseEvent) => {
-    //   this.magicIframeEventHandler({ event: 'iframe-click', details: $event });
-    // });
   }
   private addKeyUpListener() {
 
@@ -240,9 +232,6 @@ export class SebMagicIframe {
       .subscribe(($event: Event) => {
         this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
       });
-    // this.iframe.contentDocument.addEventListener('keyup',($event: KeyboardEvent) => {
-    //   this.magicIframeEventHandler({ event: 'iframe-keyup', details: $event });
-    // });
   }
 
   private addCss() {
