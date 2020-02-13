@@ -157,20 +157,21 @@ export class SebMagicIframe {
   }
 
   render() {
-    return <Host>
-            <div>
-              { this.loading ?
-                <div class="seb-iframe-loading"><slot></slot></div> : ''
-              }
-              <iframe src={this.getSafeSrc()}
-                      ref={(el) => this.iframe = el as HTMLIFrameElement}
-                      class="seb-iframe"
-                      frameborder="0"
-                      scrolling="no"
-                      title={this.pageTitle}
-                      onLoad={ev => this.onIframeLoad(ev)}>
-              </iframe>
-            </div>
+    return <Host class={{'loading' : this.loading}}>
+      {this.source ?
+        <div>
+          <div class={{'seb-iframe-loading': this.loading}} style={!this.loading && {'display':'none'}}>
+            <slot/>
+          </div>
+          <iframe src={this.getSafeSrc()}
+                  ref={(el) => this.iframe = el as HTMLIFrameElement}
+                  class="seb-iframe"
+                  frameborder="0"
+                  scrolling="no"
+                  title={this.pageTitle}
+                  onLoad={ev => this.onIframeLoad(ev)}>
+          </iframe>
+        </div> : null}
       </Host>;
   }
 
