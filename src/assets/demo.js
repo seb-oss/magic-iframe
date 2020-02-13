@@ -8,43 +8,43 @@ magicIframe.sanitizeSource = true;
 
 function writeToLog(event) {
   if(event.detail.event === 'iframe-loaded') {
-    activeSource.innerHTML =`<strong>iframe source:</strong> ${event.target.source}`;
+    activeSource.innerHTML ='<strong>iframe source:</strong>' + event.target.source;
   }
   let detail;
   switch (event.detail.event) {
     case 'iframe-click':
-      detail = `clicked: ${event.detail.details.target.toString()}`;
+      detail = 'clicked: ' + event.detail.details.target.toString();
       break;
     case 'iframe-keyup':
-      detail =`pressed: ${event.detail.details.key}`;
+      detail ='pressed: ' + event.detail.details.key;
       break;
     case 'iframe-loaded':
-      detail =`${event.target.source}`;
+      detail ='' + event.target.source;
       break;
     case 'iframe-unloaded':
-      detail =`${event.detail.details.target.URL}`;
+      detail ='' + event.detail.details.target.URL;
       break;
     default:
       detail = JSON.stringify(event.detail.details);
       break;
   }
-  const entry = `<div><strong class="mr-1">${event.detail.event}:</strong><span class="text-white">${detail}</span></div>`;
-  logEntries = [entry,...logEntries];
+  const entry = '<div><strong class="mr-1">' + event.detail.event + '</strong><span class="text-white">' + detail + '</span></div>';
+  logEntries.unshift(entry);
   logOutput.innerHTML = logEntries.join('');
-  eventLogCounter.innerText = `Magic iframe event: ${logEntries.length}`
+  eventLogCounter.innerText = 'Magic iframe event: ' + logEntries.length;
 }
 
 function clearLog() {
   logEntries = [];
   logOutput.innerHTML = logEntries.join('');
-  eventLogCounter.innerText = `Magic iframe event: ${logEntries.length}`
+  eventLogCounter.innerText = 'Magic iframe event: ' + logEntries.length;
 }
 
 function reloadIframe() {
   magicIframe.reload();
 }
 
-magicIframe.addEventListener('magicIframeEvent', ($event) => writeToLog($event));
+magicIframe.addEventListener('magicIframeEvent', function($event) {writeToLog($event)});
 // magicIframe.styleUrls = ['./css/external-stylesheet.css', './css/fonts.css'];
 let src = '/assets/fluid-page.html';
 function toggleSource() {
@@ -107,7 +107,7 @@ const matchContentWidthRadioButtons = document.getElementsByName('matchContentWi
 matchContentWidthRadioButtons[0].checked = true;
 
 function changeMatchContentWidth() {
-  const value = Array.from(matchContentWidthRadioButtons).find(radio => radio.checked).value;
+  const value = Array.from(matchContentWidthRadioButtons).find(function(radio) {return radio.checked}).value;
   magicIframe.matchContentWidth = value === "'auto'" ? 'auto' : value === 'true';
 }
 
@@ -118,7 +118,7 @@ function toggleSanitation() {
 }
 
 function injectMaliciousScript() {
-  magicIframe.source = 'jAvasCrIPT:alert(`Some malicious code running on ` + document.domain)';
+  magicIframe.source = 'jAvasCrIPT:alert(\'Some malicious code running on ' + document.domain +')';
 }
 
 toggleAutoResize();

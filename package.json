@@ -17,6 +17,7 @@
   "scripts": {
     "build": "stencil build --docs",
     "start": "concurrently \"stencil build --dev --watch --serve\" \"npm run compile-css\"",
+    "start-prod": "concurrently \"stencil build --prod --watch --serve\" \"npm run compile-css\"",
     "compile-css": "node-sass --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css && node-sass --watch --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
