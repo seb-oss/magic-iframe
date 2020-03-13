@@ -1,9 +1,9 @@
 import {Component, EventEmitter, h, Host, Prop, State, Watch} from '@stencil/core';
 import elementResizeDetectorMaker from 'element-resize-detector';
 import {sanitizeUrl} from '@braintree/sanitize-url';
-import {forkJoin, fromEvent, Subject, Subscription, timer} from 'rxjs';
+import {forkJoin, fromEvent, merge, Subject, Subscription, timer} from 'rxjs';
 import {MagicIframeEvent} from "./seb-magic-iframe-event.interface";
-import {debounce, take, takeUntil} from "rxjs/operators";
+import {debounce, switchMap, take, takeUntil, tap} from "rxjs/operators";
 
 const erd = elementResizeDetectorMaker({
   strategy: "scroll"
@@ -19,6 +19,9 @@ export class SebMagicIframe {
 
   iframe!: HTMLIFrameElement;
   styleElement: HTMLStyleElement;
+  ua = window.navigator.userAgent;
+  msie = this.ua.indexOf("MSIE ");
+  isIe = (this.msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./));
 
   /**
    * Properties
@@ -204,6 +207,26 @@ export class SebMagicIframe {
   }
 
   private addUnloadListener() {
+    if(this.isIe) {
+      fromEvent(this.iframe.contentWindow, 'beforeunload')
+        .pipe(
+          tap(_ => {
+            this.iframe.style.visibility = 'hidden';
+            this.loading = true;
+          }),
+          switchMap(_ => timer(3000)),
+          takeUntil(
+            merge(
+              fromEvent(this.iframe.contentWindow, 'unload'),
+              this._unsubscribe$
+            )
+          )
+        )
+        .subscribe(_ => {
+          this.iframe.style.visibility = 'visible';
+          this.loading = false;
+        });
+    }
     fromEvent(this.iframe.contentWindow, 'unload')
       .pipe(
         take(1),
