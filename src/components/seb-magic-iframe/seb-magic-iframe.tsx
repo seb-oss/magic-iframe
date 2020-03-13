@@ -162,7 +162,7 @@ export class SebMagicIframe {
   render() {
     return <Host class={{'loading' : this.loading}}>
       {this.source ?
-        <div>
+        <div style={this.loading && {'overflow':'hidden', 'position':'relative'}}>
           <div class={{'seb-iframe-loading': this.loading}} style={!this.loading && {'visibility':'hidden'}}>
             <slot/>
           </div>
