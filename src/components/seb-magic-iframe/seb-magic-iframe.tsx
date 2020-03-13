@@ -39,7 +39,7 @@ export class SebMagicIframe {
   @Prop() height: string;
   @Prop() minWidth: string;
   @Prop() sanitizeSource: boolean = true;
-  @Prop() maxHeight: string = '500vh';
+  @Prop() maxHeight: string = '5000vh';
   @Prop() debug: boolean = false;
 
   /**
