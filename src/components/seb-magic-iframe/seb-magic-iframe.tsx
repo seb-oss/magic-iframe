@@ -13,7 +13,7 @@ const erd = elementResizeDetectorMaker({
 @Component({
   tag: 'seb-magic-iframe',
   styleUrl: 'seb-magic-iframe.css',
-  shadow: true
+  shadow: false
 })
 export class SebMagicIframe {
 
