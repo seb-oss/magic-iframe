@@ -163,7 +163,7 @@ export class SebMagicIframe {
     return <Host class={{'loading' : this.loading}}>
       {this.source ?
         <div>
-          <div class={{'seb-iframe-loading': this.loading}} style={!this.loading && {'display':'none'}}>
+          <div class={{'seb-iframe-loading': this.loading}} style={!this.loading && {'visibility':'hidden'}}>
             <slot/>
           </div>
           <iframe src={this.getSafeSrc()}
@@ -203,7 +203,6 @@ export class SebMagicIframe {
       this.iframe.style.minWidth = '100%';
     }
     this.magicIframeEventHandler({ event: 'iframe-resized', details: {width, height} });
-
   }
 
   private addUnloadListener() {
@@ -234,6 +233,7 @@ export class SebMagicIframe {
       )
       .subscribe(($event: Event) => {
         this.loaded = false;
+        this.iframe.style.visibility = 'hidden';
         this.iframe.contentDocument.body.style.overflow = 'hidden';
         this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
       });
@@ -309,6 +309,7 @@ export class SebMagicIframe {
       console.log('Event listeners and/or styles and resize listener could not be added due to a cross-origin frame error.');
       console.warn(error);
       this.magicIframeEventHandler({ event: 'iframe-loaded-with-errors', details: error});
+      this.iframe.style.visibility = 'visible';
       this.loading = false;
       return true;
     }
@@ -376,12 +377,13 @@ export class SebMagicIframe {
           }
           // check if body has width rule defined
           this.hasBodyWidthRule();
+          this.iframe.style.visibility = 'visible';
           this.loading = false;
-          //this.$loading.next(false);
         });
     } else {
       // check if body has width rule defined
       this.hasBodyWidthRule();
+      this.iframe.style.visibility = 'visible';
       this.loading = false;
     }
   }
