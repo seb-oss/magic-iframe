@@ -46,6 +46,17 @@
 <h3>The page</h3>
 <p>This page uses media queries and fixed breakpoints. By default the width isn't defined (page will use full width), on screens greater than 992px the width is set to 940px and above and 1100px the width is set to 1024px. Simulating a typical setup for a mobile first approach with breakpoints for larger screens/devices.</p>
 <p>Since magic iframe uses a normal iframe to render content, the media query rules will be applied according to the size of the magic iframe and not the viewport width.</p>
+<h3>Sanitize source</h3>
+<p>By default urls passed to the component will be sanitized using <a href="https://github.com/braintree/sanitize-url" target="_blank">this</a> library to prevent malicious code from being injected to the iframe. If you want to use something else or implement your own logic, sanitation can be turned off by setting <code>sanitizeSource</code> to false, please note that disabling this features makes your app vulnerable to XSS.</p>
+<h3>Custom loader for content</h3>
+<p>Just add the html for your loader between the seb-magic-iframe element tags to show a custom loader while the iframe is waiting for it's content to load e.g.</p>
+<p>
+  <code>
+    &#x3C;seb-magic-iframe source=&#x22;/some-content.html&#x22;&#x3E;<br>
+    <strong style="color:#0092E1;">&nbsp;&nbsp;&#x3C;div class=&#x22;you-custom-loader&#x22;&#x3E;&#x3C;/div&#x3E;</strong>
+    <br>&#x3C;/seb-magic-iframe&#x3E;
+  </code>
+</p>
 <a href="fluid-page.html">Load fluid page</a><br />
 <a href="fixed-width-page.html">Load fixed width page</a>
 </body>

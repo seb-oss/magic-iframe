@@ -1,7 +1,13 @@
 const magicIframe = document.getElementById('magicIframe');
 const eventLogCounter = document.querySelector('#eventLog > h4');
+const eventLog = document.getElementById('eventLog');
 const logOutput = document.getElementById('logOutput');
 const activeSource = document.getElementById('activeSource');
+const copyNotice = document.getElementById('copyNotice');
+const iframeOptions = document.getElementById('iframeOptions');
+const iframeOptionsBtn = document.getElementById('iframeOptionsBtn');
+
+copyNotice.innerText = '©' + new Date().getFullYear() + ' Skandinaviska Enskilda Banken AB (publ)';
 let logEntries = [];
 
 magicIframe.sanitizeSource = true;
@@ -66,6 +72,7 @@ function toggleSource() {
 }
 
 
+
 const inlineStylesCheckbox = document.getElementById('inlineStyle_checkbox');
 inlineStylesCheckbox.checked = true;
 function toggleInlineStyles() {
@@ -121,6 +128,20 @@ function injectMaliciousScript() {
   magicIframe.source = 'jAvasCrIPT:alert(\'Some malicious code running on ' + document.domain +')';
 }
 
+function toggleIframeTools() {
+  const isActive = iframeOptionsBtn.innerText === 'Hide options and log';
+  if(isActive) {
+    iframeOptionsBtn.innerText = 'Show options and log';
+    iframeOptions.style.display = 'none';
+    eventLog.style.display = 'none';
+  } else {
+    iframeOptionsBtn.innerText = 'Hide options and log';
+    iframeOptions.style.display = 'block';
+    eventLog.style.display = 'block';
+  }
+}
+
+toggleIframeTools();
 toggleAutoResize();
 toggleScaleContent();
 toggleInlineStyles();

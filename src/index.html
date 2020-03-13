@@ -44,38 +44,38 @@
           <p class="mb-0 lead">The Magic iframe component adds responsiveness to iframes as well as the ability to listen to events, override styles and show custom loaders when iframe is loading content. <a href="https://github.com/sebgroup/ng-magic-iframe#install-with-npm" class="font-weight-normal d-block">Install using npm<i class="fal fa-arrow-right ml-2" style="font-size: 16px;"></i></a></p>
         </div>
         <div class="card-body">
-          <!--<button *ngIf="!src" class="btn btn-primary" (click)="setSource()">Set iframe source</button>
-          <seb-ng-magic-iframe #iframeComponent
-                               [source]="src"
-                               [styles]="magicControlsForm.get('inlineStyles').value ? styles : false"
-                               [styleUrls]="magicControlsForm.get('externalStyles').value ? styleUrls : false"
-                               [autoResize]="magicControlsForm.get('autoResize').value"
-                               [matchContentWidth]="magicControlsForm.get('matchContentWidth').value"
-                               [resizeDebounceMillis]="magicControlsForm.get('resizeDebounceMillis').value"
-                               [scaleContent]="magicControlsForm.get('scaleContent').value"
-                               (iframeEvent)="printEvent($event)">
-            <div *ngIf="magicControlsForm.get('showSkeletonLoader').value" class="skeleton-loader"></div>
-          </seb-ng-magic-iframe>-->
           <seb-magic-iframe
             id="magicIframe"
             source="/assets/fluid-page.html">
             <div class="skeleton-loader"></div>
           </seb-magic-iframe>
         </div>
-        <div class="card-body border-top py-0">
-          <!--<button class="btn btn-link pl-0" (click)="toggleIframeTools()">{{isActiveIframeTools ? 'Hide options and log' : 'Show options and log'}}</button>-->
+        <div class="card-body bg-dark">
+          <h3 class="text-light">Basic usage</h3>
+            <code>
+              <span style="color: #adadad;">/* javascript for custom web component (one for legacy browsers and one for browsers that support modules) */</span><br>
+              &#x3C;script type=&#x22;module&#x22; src=&#x22;magic-iframe.esm.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
+              &#x3C;script nomodule src=&#x22;magic-iframe.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
+              <br>
+              <span style="color: #adadad;">/* seb-magic-iframe element tag for custom web component */</span><br>
+              &#x3C;seb-magic-iframe source=&#x22;/assets/first-page.html&#x22;&#x3E;&#x3C;/seb-magic-iframe&#x3E;
+            </code>
+          <!--<exemplify [sources]="sources"></exemplify>-->
         </div>
-        <div class="card-footer" *ngIf="isActiveIframeTools">
+        <div class="card-body py-0">
+          <button id="iframeOptionsBtn" class="btn btn-link pl-0" onclick="toggleIframeTools()">Hide options and log</button>
+        </div>
+        <div class="card-footer" id="iframeOptions">
           <h4>Magic iframe options</h4>
-          <form [formGroup]="magicControlsForm">
+          <form>
             <div class="row mb-3">
               <div class="col-12 col-sm-auto mb-3">
                 <label>Toggle options</label>
-                <div class="custom-control custom-checkbox mt-2" [ngbTooltip]="inlineTip" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-2" title="Inject inline styles in the iframe.">
                   <input type="checkbox" class="custom-control-input" id="inlineStyle_checkbox" onclick="toggleInlineStyles()">
                   <label class="custom-control-label" for="inlineStyle_checkbox">Apply inline styles</label>
                 </div>
-                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Inject external-stylesheet.css and fonts.css in iframe and emit event and show contents when external sources have finished loading.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" title="Inject external-stylesheet.css and fonts.css in iframe and emit event and show contents when external sources have finished loading.">
                   <input type="checkbox" class="custom-control-input" id="externalStyle_checkbox" onclick="toggleStyles()">
                   <label class="custom-control-label" for="externalStyle_checkbox">Apply external stylesheets (<a href="./assets/css/external-stylesheet.css" target="_blank">styles</a> and <a href="./assets/css/fonts.css" target="_blank">font</a>)</label>
                 </div>
@@ -83,21 +83,21 @@
                   <input type="checkbox" class="custom-control-input" id="showSkeletonLoader_checkbox" formControlName="showSkeletonLoader">
                   <label class="custom-control-label" for="showSkeletonLoader_checkbox">Show custom loader</label>
                 </div>-->
-                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Resize iframe when content inside iframe changes height.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" title="Resize iframe when content inside iframe changes height.">
                   <input type="checkbox" class="custom-control-input" id="autoResize_checkbox" onclick="toggleAutoResize()">
                   <label class="custom-control-label" for="autoResize_checkbox">Auto resize</label>
                 </div>
-                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Zoom/scale iframe content to fit size of magic iframe.'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" title="Zoom/scale iframe content to fit size of magic iframe.">
                   <input type="checkbox" class="custom-control-input" id="scaleContent_checkbox" onclick="toggleScaleContent()">
                   <label class="custom-control-label" for="scaleContent_checkbox">Scale content</label>
                 </div>
-                <div class="custom-control custom-checkbox mt-3" [ngbTooltip]="'Sanitize source to prevent XSS attacks'" [container]="'body'">
+                <div class="custom-control custom-checkbox mt-3" title="Sanitize source to prevent XSS attacks">
                   <input type="checkbox" class="custom-control-input" id="sanitizeSource_checkbox" onclick="toggleSanitation()">
                   <label class="custom-control-label" for="sanitizeSource_checkbox">Sanitize source</label>
                 </div>
               </div>
               <div class="col-12 col-sm-auto">
-                <div class="form-group" [ngbTooltip]="'Debounce time for resize detection of iframe content height.'" [container]="'body'">
+                <div class="form-group" title="Debounce time for resize detection of iframe content height.">
                   <label for="resizeDebounceMillis_input">Resize debounce milliseconds</label>
                   <div class="input-group mb-3">
                     <input type="number" class="form-control" id="resizeDebounceMillis_input" aria-label="Resize debounce milliseconds" onkeyup="updateResizeDebounce()">
@@ -106,7 +106,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group" [ngbTooltip]="'Debounce time for scale execution.'" [container]="'body'">
+                <div class="form-group" title="Debounce time for scale execution.">
                   <label for="scaleDebounceMillis_input">Scale debounce milliseconds</label>
                   <div class="input-group mb-3">
                     <input type="number" class="form-control" id="scaleDebounceMillis_input" aria-label="Scale debounce milliseconds" onkeyup="updateScaleDebounce()">
@@ -116,7 +116,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="matchContent_radio" [ngbTooltip]="'Set min width for magic iframe based on iframe content width. Works best with layouts using fixed width.'" [container]="'body'">Match width of iframe content</label>
+                  <label for="matchContent_radio" title="Set min width for magic iframe based on iframe content width. Works best with layouts using fixed width.">Match width of content</label>
                   <div class="row">
                     <div class="col-12 col-md-auto mt-2 mt-md-0 mb-3 mb-md-0">
                       <div class="custom-control custom-radio">
@@ -155,9 +155,6 @@
             <button class="btn btn-sm btn-light col" onclick="reloadIframe()">Reload iframe</button>
           </div>
         </div>
-        <div class="card-footer">
-          <!--<exemplify [sources]="sources"></exemplify>-->
-        </div>
       </div>
     </div>
     <div class="col-12 col-md-6">
@@ -169,16 +166,20 @@
         <div class="card-body" id="normalIframe">
           <iframe src="/assets/fluid-page.html" frameborder="0" style="width: 100%" height="200"></iframe>
         </div>
-        <div class="card-footer">
-          <p>Nothing special going on here but just as reference, this is how you'd normally add an iframe.</p>
+        <div class="card-body bg-dark">
+          <h3 class="text-light">Usage</h3>
+          <code>
+            <span style="color: #adadad;">/* nothing special going on here but just as reference, this is how you'd normally add an iframe */</span><br>
+            &#x3C;iframe src=&#x22;/assets/first-page.html&#x22; frameborder=&#x22;0&#x22; style=&#x22;width: 100%&#x22; height=&#x22;200&#x22;&#x3E;&#x3C;/iframe&#x3E;
+          </code>
         </div>
       </div>
     </div>
   </div>
   <footer>
     <div class="py-5 text-center row justify-content-center">
-      <div class="col-12 col-sm-auto text-muted">© {{date | date:'yyyy'}} Skandinaviska Enskilda Banken AB (publ)</div>
-      <div class="col-12 col-sm-auto"><span class="mr-3">Version: <a href="{{'https://github.com/sebgroup/ng-magic-iframe/releases/' + versionLink}}" target="_blank">{{version}}</a></span>Build: {{travis_build_number}}</div>
+      <div id="copyNotice" class="col-12 col-sm-auto text-muted"></div>
+      <!--<div class="col-12 col-sm-auto"><span class="mr-3">Version: <a href="{{'https://github.com/sebgroup/magic-iframe/releases/' + versionLink}}" target="_blank">{{version}}</a></span>Build: {{travis_build_number}}</div>-->
       <div class="col-12 col-sm-auto">Licensed under <a href="https://github.com/sebgroup/ng-magic-iframe/blob/master/LICENSE.md" target="_blank">Apache 2.0</a></div>
     </div>
   </footer>
