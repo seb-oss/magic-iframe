@@ -29,7 +29,7 @@ jobs:
         npm run build
         
     - name: Run semantic release and publish new version to npm
-      run: run semantic-release
+      run: npm run semantic-release
       
     - name: Deploy docs to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
