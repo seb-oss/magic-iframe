@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fluid page</title>
+    <style type="text/css">
+        body {
+            background: #41B0EE;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .flex {
+            display: flex;
+            flex: 0 0 auto;
+            flex-wrap: wrap;
+        }
+        .flex p {
+            min-width: 260px;
+            display: inline-block;
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+            padding-right: 1rem;
+            margin-top: 0;
+        }
+        .ml-2 {
+          margin-left: .25rem;
+        }
+        textarea {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/light.css" integrity="sha384-33RmjeesW9BZ4wR2Gm3n4iBXOvGTto4znqL2kZleiRanWDxM59IHIq5RsbRioqxb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-srL3Qh9R/n855m4o5fegS//B2q0R1md7z6ndDYaPj8iEp0j0IuKdFVWMY0JosKPF" crossorigin="anonymous">
+</head>
+<body>
+<h2>Fluid page (iframed)</h2>
+<div>
+  <p>This page uses a fluid layout, i.e. it's a fully responsive page that uses percentage instead fixed pixels for widths.</p>
+  <p>In a normal iframe this page would get cropped or require vertical scrolling but with the magic iframe we have the ability to use auto resize.</p>
+  <h3>Auto resize</h3>
+  <p>The ability to automatically resize the iframe according to it's content is turned on by default but the feature can be disabled by setting <code>autoResize</code> to false. There's also an optional property called <code>resizeDebounce</code> that can be used to control how often the resize event should force a resize of the iframe (number in milliseconds, 0 by default).</p>
+  <div class="flex">
+    <div>
+      <h3>Inline styles</h3>
+      <p>Inject styles to the content inside the iframe using the <code>styles</code> property and set styles like you normally would with the <code>style</code> attribute.</p>
+    </div>
+    <div>
+      <h3>External stylesheets</h3>
+      <p>Append one or more external stylesheets to the content inside the iframe with the <code>styleUrls</code> property which takes an array of strings.</p>
+    </div>
+  </div>
+</div>
+<button>Button</button>
+<a href="fixed-width-page.html">Load fixed width page</a><br />
+<a href="responsive-page.html">Load responsive page</a><br />
+<a href="https://seb.se">Load restricted page (throws error)</a><br />
+<hr>
+<a href="mailto:some.email@random.domain.xx">Send email<i class="fal fa-envelope ml-2"></i></a><br />
+<a href="example.pdf">Open pdf<i class="fal fa-file-pdf ml-2"></i></a><br />
+<a href="example.pdf" target="_blank">Open pdf (blank)<i class="fal fa-file-pdf ml-2"></i></a><br />
+<a href="example.pdf" download>Download pdf<i class="fal fa-file-pdf ml-2"></i></a><br />
+<a href="example.xlsx">Download spreadsheet<i class="fal fa-file-excel ml-2"></i></a><br />
+<a href="#" onClick="alert('This is an alert!');">Alert<i class="fal fa-comment-alt ml-2"></i></a><br />
+<hr>
+<div class="form-group">
+    <label for="exampleFormControlTextarea">Resize text area to resize iframe</label>
+    <textarea class="form-control" id="exampleFormControlTextarea" rows="3">Try and resize me!</textarea>
+</div>
+</body>
+</html>
