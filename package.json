@@ -1,7 +1,9 @@
 {
-  "name": "magic-iframe",
-  "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "name": "@sebgroup/magic-iframe",
+  "license": "Apache-2.0",
+  "author": "Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)",
+  "version": "0.0.0-semantically-released",
+  "description": "A magic iframe web component with super powers!",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
