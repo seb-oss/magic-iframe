@@ -52,20 +52,20 @@ function reloadIframe() {
 
 magicIframe.addEventListener('magicIframeEvent', function($event) {writeToLog($event)});
 // magicIframe.styleUrls = ['./css/external-stylesheet.css', './css/fonts.css'];
-let src = '/assets/fluid-page.html';
+let src = 'assets/fluid-page.html';
 function toggleSource() {
   switch (src) {
-    case '/assets/fluid-page.html':
-      src = '/assets/fixed-width-page.html';
+    case 'assets/fluid-page.html':
+      src = 'assets/fixed-width-page.html';
       break;
-    case '/assets/fixed-width-page.html':
-      src = '/assets/responsive-page.html';
+    case 'assets/fixed-width-page.html':
+      src = 'assets/responsive-page.html';
       break;
-    case '/assets/responsive-page.html':
+    case 'assets/responsive-page.html':
       src = 'http://seb.se';
       break;
     case 'http://seb.se':
-      src = '/assets/fluid-page.html';
+      src = 'assets/fluid-page.html';
       break;
   }
   magicIframe.source = src;
