@@ -1,43 +1,40 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
 on:
   push:
     branches: [ alpha ]
   pull_request:
     branches: [ alpha ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
-    # Runs a single command using the runners shell
     - name: Install dependencies and build app
       run: |
         npm ci
         npm run build
         
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Run semantic release and publish new version to npm
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: npm run semantic-release
-
+      
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Deploy docs to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
       with:
         ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
-        BRANCH: docs # The branch the action should deploy to.
+        BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: www # The folder the action should deploy.
 
