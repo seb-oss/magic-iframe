@@ -29,12 +29,15 @@ jobs:
         npm run build
         
     - name: Run semantic release and publish new version to npm
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: npm run semantic-release
-      
+
     - name: Deploy docs to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
       with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
         BRANCH: docs # The branch the action should deploy to.
         FOLDER: www # The folder the action should deploy.
 
