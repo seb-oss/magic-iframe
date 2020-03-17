@@ -16,19 +16,38 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
-    "start": "concurrently \"stencil build --dev --watch --serve\" \"npm run compile-css\"",
-    "start-prod": "concurrently \"stencil build --prod --watch --serve\" \"npm run compile-css\"",
-    "compile-css": "node-sass --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css && node-sass --watch --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css",
+    "postbuild": "npm run compile-css",
+    "start": "concurrently \"stencil build --dev --watch --serve\" \"npm run compile-css:watch\"",
+    "start-prod": "concurrently \"stencil build --prod --watch --serve\" \"npm run compile-css:watch\"",
+    "compile-css": "node-sass --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css && node-sass --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css",
+    "compile-css:watch": "node-sass --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css && node-sass --watch --importer=node_modules/node-sass-tilde-importer src/styles.scss www/assets/css/styles.css",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
-    "generate": "stencil generate"
+    "generate": "stencil generate",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint --edit"
+    }
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@stencil/core": "^1.8.5",
     "@types/element-resize-detector": "^1.1.2",
     "concurrently": "^5.1.0",
+    "cz-conventional-changelog": "^3.1.0",
+    "husky": "^4.2.3",
     "node-sass": "^4.13.1",
-    "node-sass-tilde-importer": "^1.0.2"
+    "node-sass-tilde-importer": "^1.0.2",
+    "semantic-release": "^17.0.4"
   },
   "license": "Apache 2.0",
   "dependencies": {
@@ -36,5 +55,10 @@
     "@sebgroup/bootstrap": "^5.1.1",
     "element-resize-detector": "^1.2.1",
     "rxjs": "^6.5.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
