@@ -20,6 +20,7 @@ jobs:
       name: Store build
       with:
         name: build-artifact
+        path: magic-iframe
         
   release:
     needs: build
