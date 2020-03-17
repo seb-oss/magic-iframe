@@ -20,7 +20,6 @@ jobs:
       name: Store build
       with:
         name: build-artifact
-        path: build-artifact
         
   release:
     needs: build
