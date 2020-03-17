@@ -152,7 +152,7 @@ export class SebMagicIframe {
   private _resizeListener: Subscription;
   private _styleElement: HTMLStyleElement;
   private _stylesheets: Array<HTMLLinkElement> = [];
-  private _resizeDebounceTimeout: number;
+  private _resizeDebounceTimeout: NodeJS.Timeout;
   private _unsubscribe$ = new Subject<void>();
 
   getSafeSrc(): string {
@@ -184,7 +184,7 @@ export class SebMagicIframe {
       clearTimeout(this._resizeDebounceTimeout);
 
       // set timeout (resize complete event)
-      this._resizeDebounceTimeout = setTimeout(() => this.updateSize(style), this.resizeDebounce);
+      this._resizeDebounceTimeout = global.setTimeout(() => this.updateSize(style), this.resizeDebounce);
     });
   }
 
