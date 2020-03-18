@@ -23,7 +23,7 @@ jobs:
       run: npm run semantic-release
     
     - name: Set base href
-      run: npm run "replace \"<base href=(.*?)>\" \"<base href='/${{ github.event.repository.name }}/'>\" www/index.html"
+      run: replace \"<base href=(.*?)>\" \"<base href='/${{ github.event.repository.name }}/'>\" www/index.html
       
     - name: Deploy documentation to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
