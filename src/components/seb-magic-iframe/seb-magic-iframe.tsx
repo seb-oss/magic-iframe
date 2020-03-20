@@ -24,22 +24,63 @@ export class SebMagicIframe {
   isIe = (this.msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./));
 
   /**
-   * Properties
-   *
+   * Url to iframe content.
    */
-
   @Prop() source: string;
+
+  /**
+   * Apply/inject inline styles to the iframe.
+   */
   @Prop() styles: string;
+
+  /**
+   * Add one or more stylesheets to the iframe, note that the iframe won't be visible until they've loaded.
+   */
   @Prop() styleUrls: Array<string>;
+
+  /**
+   * Resize the iframe when the inner content changes height.
+   */
   @Prop() autoResize: boolean = true;
+
+  /**
+   * Debounce time in milliseconds for resize event.
+   */
   @Prop() resizeDebounce: number = 0;
-  @Prop() scaleDebounce: number = 0;
-  @Prop() matchContentWidth: boolean | 'auto' = false;
+
+  /**
+   * Scale content inside iframe to match with of iframe, useful when iframing fixed width pages.
+   */
   @Prop() scaleContent: boolean = false;
-  @Prop() height: string;
+
+  /**
+   * Debounce time in milliseconds for scale event.
+   */
+  @Prop() scaleDebounce: number = 0;
+
+  /**
+   * Set width of magic iframe to width of iframe content, useful when iframing fixed width pages.
+   */
+  @Prop() matchContentWidth: boolean | 'auto' = false;
+
+  /**
+   * Set a min width for the iframe.
+   */
   @Prop() minWidth: string;
+
+  /**
+   * Sanitize url:s (both for iframe and external stylesheets) to prevent XSS attacks.
+   */
   @Prop() sanitizeSource: boolean = true;
-  @Prop() maxHeight: string = '5000vh';
+
+  /**
+   * Prevent the iframe from growing infinitely by setting a max height i.e. prevent infinite loop for height value when iframe content height depends on container height.
+   */
+  @Prop() maxHeight: string = '10000vh';
+
+  /**
+   * Print debug log (console log).
+   */
   @Prop() debug: boolean = false;
 
   /**
@@ -128,6 +169,11 @@ export class SebMagicIframe {
     }
   }
 
+  /**
+   * Listen to events emitted by magic iframe. E.g.
+   * `const magicIframe = document.getElementById('magicIframe');
+   * magicIframe.addEventListener('magicIframeEvent', $event => console.log($event.detail));`
+   */
   // @ts-ignore
   @Event() magicIframeEvent: EventEmitter<MagicIframeEvent>;
   magicIframeEventHandler(event: MagicIframeEvent) {

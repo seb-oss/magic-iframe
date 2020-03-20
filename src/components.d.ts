@@ -13,21 +13,53 @@ import {
 
 export namespace Components {
   interface SebMagicIframe {
+    /**
+    * Resize the iframe when the inner content changes height.
+    */
     'autoResize': boolean;
+    /**
+    * Print debug log (console log).
+    */
     'debug': boolean;
-    'height': string;
+    /**
+    * Set width of magic iframe to width of iframe content, useful when iframing fixed width pages.
+    */
     'matchContentWidth': boolean | 'auto';
+    /**
+    * Prevent the iframe from growing infinitely by setting a max height i.e. prevent infinite loop for height value when iframe content height depends on container height.
+    */
     'maxHeight': string;
+    /**
+    * Set a min width for the iframe.
+    */
     'minWidth': string;
+    /**
+    * Debounce time in milliseconds for resize event.
+    */
     'resizeDebounce': number;
+    /**
+    * Sanitize url:s (both for iframe and external stylesheets) to prevent XSS attacks.
+    */
     'sanitizeSource': boolean;
+    /**
+    * Scale content inside iframe to match with of iframe, useful when iframing fixed width pages.
+    */
     'scaleContent': boolean;
+    /**
+    * Debounce time in milliseconds for scale event.
+    */
     'scaleDebounce': number;
     /**
-    * Properties
+    * Url to iframe content.
     */
     'source': string;
+    /**
+    * Add one or more stylesheets to the iframe, note that the iframe won't be visible until they've loaded.
+    */
     'styleUrls': Array<string>;
+    /**
+    * Apply/inject inline styles to the iframe.
+    */
     'styles': string;
   }
 }
@@ -47,22 +79,57 @@ declare global {
 
 declare namespace LocalJSX {
   interface SebMagicIframe {
+    /**
+    * Resize the iframe when the inner content changes height.
+    */
     'autoResize'?: boolean;
+    /**
+    * Print debug log (console log).
+    */
     'debug'?: boolean;
-    'height'?: string;
+    /**
+    * Set width of magic iframe to width of iframe content, useful when iframing fixed width pages.
+    */
     'matchContentWidth'?: boolean | 'auto';
+    /**
+    * Prevent the iframe from growing infinitely by setting a max height i.e. prevent infinite loop for height value when iframe content height depends on container height.
+    */
     'maxHeight'?: string;
+    /**
+    * Set a min width for the iframe.
+    */
     'minWidth'?: string;
+    /**
+    * Listen to events emitted by magic iframe. E.g. `const magicIframe = document.getElementById('magicIframe'); magicIframe.addEventListener('magicIframeEvent', $event => console.log($event.detail));`
+    */
     'onMagicIframeEvent'?: (event: CustomEvent<MagicIframeEvent>) => void;
+    /**
+    * Debounce time in milliseconds for resize event.
+    */
     'resizeDebounce'?: number;
+    /**
+    * Sanitize url:s (both for iframe and external stylesheets) to prevent XSS attacks.
+    */
     'sanitizeSource'?: boolean;
+    /**
+    * Scale content inside iframe to match with of iframe, useful when iframing fixed width pages.
+    */
     'scaleContent'?: boolean;
+    /**
+    * Debounce time in milliseconds for scale event.
+    */
     'scaleDebounce'?: number;
     /**
-    * Properties
+    * Url to iframe content.
     */
     'source'?: string;
+    /**
+    * Add one or more stylesheets to the iframe, note that the iframe won't be visible until they've loaded.
+    */
     'styleUrls'?: Array<string>;
+    /**
+    * Apply/inject inline styles to the iframe.
+    */
     'styles'?: string;
   }
 
