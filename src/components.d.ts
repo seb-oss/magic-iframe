@@ -100,7 +100,7 @@ declare namespace LocalJSX {
     */
     'minWidth'?: string;
     /**
-    * Listen to events emitted by magic iframe. E.g. `const magicIframe = document.getElementById('magicIframe'); magicIframe.addEventListener('magicIframeEvent', $event => console.log($event.detail));`
+    * Listen to events emitted by magic iframe e.g. <pre> const magicIframe = document.getElementById('magicIframe');<br> magicIframe.addEventListener('magicIframeEvent', $event => console.log($event.detail)); </pre>
     */
     'onMagicIframeEvent'?: (event: CustomEvent<MagicIframeEvent>) => void;
     /**
