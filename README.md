@@ -39,7 +39,7 @@ This will load the latest version of the component if you want to use a specific
 
 ## In a stencil app
 - Run `npm install @sebgroup/magic-iframe --save`
-- Add an import to the npm packages `import @sebgroup/magic-iframe;`
+- Import package `import @sebgroup/magic-iframe;`
 
 
 ## In template, JSX, html etc.
@@ -63,7 +63,7 @@ Once the script has been added you're free to use the element anywhere in your t
 
 ### With custom loading indicator
 ```html
-<seb-magic-iframe source="'/foo/bar/index.html'">
+<seb-magic-iframe source="/foo/bar/index.html">
   <div class="skeleton-loader"></div> <!-- replace with your own code -->
 </seb-magic-iframe>
 ```
