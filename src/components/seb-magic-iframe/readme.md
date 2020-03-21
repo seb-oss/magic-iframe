@@ -52,7 +52,7 @@ magicIframe.styleUrls = ['/css/external-stylesheet.css', '/css/fonts.css']
 ## Type \<MagicIframeEvent\>
 <pre>
 MagicIframeEvent {
-  event: <a href="/#type-magiciframeeventname">MagicIframeEventName</a>;
+  event: <a href="#type-magiciframeeventname">MagicIframeEventName</a>;
   details: any | MouseEvent | KeyboardEvent;
 }
 </pre>
