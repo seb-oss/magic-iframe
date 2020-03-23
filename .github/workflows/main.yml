@@ -31,10 +31,10 @@ jobs:
       run: ./node_modules/.bin/replace '<base href=(.*?)>' '<base href="/${{ github.event.repository.name }}/">' www/index.html
     
     - name: Set build (run) number
-      run: ./node_modules/.bin/replace '##BUILD_NUMBER##' '{{ github.run_number }}' www/index.html
+      run: ./node_modules/.bin/replace '##BUILD_NUMBER##' '${{ github.run_number }}' www/index.html
     
     - name: Set version number
-      run: ./node_modules/.bin/replace '##VERSION##' '{{ steps.semantic.outputs.release-version }}' www/index.html
+      run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.semantic.outputs.release-version }}' www/index.html
         
     - name: Deploy documentation to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
