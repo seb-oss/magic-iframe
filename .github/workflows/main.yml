@@ -13,7 +13,7 @@ jobs:
     
     - name: Get last version
       id: version
-      uses: jessicalostinspace/github-action-get-regex-branch@v1.0.2
+      uses: jessicalostinspace/github-action-get-regex-branch@v1.0.8
       with:
         regex-string: 'alpha'
     
