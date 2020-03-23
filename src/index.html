@@ -16,7 +16,7 @@
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-dark bg-dark">
-    <span class="navbar-brand" href="#">
+    <span class="navbar-brand">
       Magic iframe
     </span>
   <div class="github-ribbon-wrapper">
@@ -42,7 +42,7 @@
       <h2 class="px-3 px-sm-0">Magic iframe</h2>
       <div class="card my-3">
         <div class="card-header border-bottom">
-          <p class="mb-0 lead">The Magic iframe component adds responsiveness to iframes as well as the ability to listen to events, override styles and show custom loaders when iframe is loading content. <a href="https://github.com/sebgroup/ng-magic-iframe#install-with-npm" class="font-weight-normal d-block">Install using npm<i class="fal fa-arrow-right ml-2" style="font-size: 16px;"></i></a></p>
+          <p class="mb-0 lead">The Magic iframe component adds responsiveness to iframes as well as the ability to listen to events, override styles and show custom loaders when iframe is loading content.</p>
         </div>
         <div class="card-body">
           <seb-magic-iframe
@@ -55,8 +55,8 @@
           <h3 class="text-light">Basic usage</h3>
             <code>
               <span style="color: #adadad;">/* javascript for custom web component (one for legacy browsers and one for browsers that support modules) */</span><br>
-              &#x3C;script type=&#x22;module&#x22; src=&#x22;magic-iframe.esm.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
-              &#x3C;script nomodule src=&#x22;magic-iframe.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
+              &#x3C;script type=&#x22;module&#x22; src=&#x22;https://unpkg.com/@sebgroup/magic-iframe/dist/magic-iframe/magic-iframe.esm.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
+              &#x3C;script nomodule src=&#x22;https://unpkg.com/@sebgroup/magic-iframe/dist/magic-iframe/magic-iframe.js&#x22;&#x3E;&#x3C;/script&#x3E;<br>
               <br>
               <span style="color: #adadad;">/* seb-magic-iframe element tag for custom web component */</span><br>
               &#x3C;seb-magic-iframe source=&#x22;/assets/first-page.html&#x22;&#x3E;&#x3C;/seb-magic-iframe&#x3E;
@@ -142,6 +142,7 @@
               </div>
             </div>
           </form>
+          <div class="alert alert-info alert-icon">Read more about the options and how they can be used in the <a href="https://github.com/sebgroup/magic-iframe/blob/##VERSION##/src/components/seb-magic-iframe/readme.md">documentation</a>.</div>
         </div>
         <div class="card-footer bg-dark pr-0" id="eventLog">
           <h4 class="text-white mb-0"></h4>
@@ -180,7 +181,7 @@
   <footer>
     <div class="py-5 text-center row justify-content-center">
       <div id="copyNotice" class="col-12 col-sm-auto text-muted"></div>
-      <div class="col-12 col-sm-auto"><span class="mr-3">Version: <a href="https://github.com/sebgroup/magic-iframe/releases/tag/v##VERSION##" target="_blank">##VERSION##</a></span>Build: ##BUILD_NUMBER##</div>
+      <div class="col-12 col-sm-auto"><span class="mr-3">Version: <a href="https://github.com/sebgroup/magic-iframe/releases/tag/##VERSION##" target="_blank">##VERSION##</a></span>Build: ##BUILD_NUMBER##</div>
       <div class="col-12 col-sm-auto">Licensed under <a href="https://github.com/sebgroup/ng-magic-iframe/blob/master/LICENSE.md" target="_blank">Apache 2.0</a></div>
     </div>
   </footer>
