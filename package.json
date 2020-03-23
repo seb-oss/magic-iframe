@@ -1,7 +1,9 @@
 {
-  "name": "magic-iframe",
-  "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "name": "@sebgroup/magic-iframe",
+  "license": "Apache 2.0",
+  "author": "Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)",
+  "version": "0.0.0-semantically-released",
+  "description": "A magic iframe web component with super powers!",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
@@ -25,7 +27,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "commit": "git-cz",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "replace-local-test": "replace \"<base href=(.*?)>\" \"<base href='/magic-iframe/'>\" www/index.html"
   },
   "commitlint": {
     "extends": [
@@ -47,9 +50,9 @@
     "husky": "^4.2.3",
     "node-sass": "^4.13.1",
     "node-sass-tilde-importer": "^1.0.2",
+    "replace": "^1.1.5",
     "semantic-release": "^17.0.4"
   },
-  "license": "Apache 2.0",
   "dependencies": {
     "@braintree/sanitize-url": "^4.0.0",
     "@sebgroup/bootstrap": "^5.1.1",
@@ -60,5 +63,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

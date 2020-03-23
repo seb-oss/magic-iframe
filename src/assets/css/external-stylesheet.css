@@ -6,6 +6,9 @@ body {
     color: #444;
     text-align: left;
 }
+h2 {
+  padding-top: 10px;
+}
 h3 {
   margin-bottom: 5px;
 }
