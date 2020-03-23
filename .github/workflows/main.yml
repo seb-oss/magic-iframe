@@ -14,16 +14,16 @@ jobs:
     - name: Build web component and documentation
       run: npm run build
     
-    - uses: codfish/semantic-release-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-   
-    #- name: Run semantic release and publish new version to npm
+    #- uses: codfish/semantic-release-action@master
     #  env:
-    #    GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    #    GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     #    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    #  run: npm run semantic-release
+   
+    - name: Run semantic release and publish new version to npm
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: npm run semantic-release
     
     - name: Set base href
       run: ./node_modules/.bin/replace '<base href=(.*?)>' '<base href="/${{ github.event.repository.name }}/">' www/index.html
@@ -39,16 +39,13 @@ jobs:
         owner: sebgroup
         repo: magic-iframe
       
-    - name: Set version number after release
-      if: steps.semantic.outputs.new-release-published == 'true'
-      run: ./node_modules/.bin/replace '##VERSION##' 'v${{ steps.semantic.outputs.release-version }}' www/index.html
+    #- name: Set version number after release
+    #  if: steps.semantic.outputs.new-release-published == 'true'
+    #  run: ./node_modules/.bin/replace '##VERSION##' 'v${{ steps.semantic.outputs.release-version }}' www/index.html
       
-    - name: Set version number no release
-      if: steps.semantic.outputs.new-release-published != 'true'
-      run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.version.outputs.latest_tag }}' www/index.html
-    
-    - name: Get last version
-      run: echo "The last release was ${{ steps.version.outputs.latest_tag }}"  
+    - name: Set version number
+    #  if: steps.semantic.outputs.new-release-published != 'true'
+      run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.version.outputs.latest_tag }}' www/index.html 
           
     - name: Deploy documentation to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
