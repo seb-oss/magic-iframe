@@ -11,14 +11,15 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Get last version
+    - name: Get Latest Release
       id: version
-      uses: jessicalostinspace/github-action-get-regex-branch@v1.0.8
+      uses: abatilo/release-info-action@v1.1.0
       with:
-        regex-string: 'alpha'
+        owner: sebgroup
+        repo: magic-iframe
     
     - name: Get last version
-      run: echo "The time was ${{ steps.version.outputs.last-semver }}"  
+      run: echo "The last release was ${{ steps.version.outputs.latest_tag }}"  
 
     - name: Build web component and documentation
       run: npm run build
