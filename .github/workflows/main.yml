@@ -40,11 +40,11 @@ jobs:
         repo: magic-iframe
       
     - name: Set version number after release
-      if: steps.semantic.outputs.new-release-published === 'true'
+      if: steps.semantic.outputs.new-release-published == 'true'
       run: ./node_modules/.bin/replace '##VERSION##' 'v${{ steps.semantic.outputs.release-version }}' www/index.html
       
     - name: Set version number no release
-      if: steps.semantic.outputs.new-release-published !== 'true'
+      if: steps.semantic.outputs.new-release-published != 'true'
       run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.version.outputs.latest_tag }}' www/index.html
     
     - name: Get last version
