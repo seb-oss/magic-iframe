@@ -10,16 +10,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: npm ci
-    
-    - name: Get Latest Release
-      id: version
-      uses: abatilo/release-info-action@v1.1.0
-      with:
-        owner: sebgroup
-        repo: magic-iframe
-    
-    - name: Get last version
-      run: echo "The last release was ${{ steps.version.outputs.latest_tag }}"  
 
     - name: Build web component and documentation
       run: npm run build
@@ -36,20 +26,30 @@ jobs:
     #  run: npm run semantic-release
     
     - name: Set base href
-      if: steps.semantic.outputs.new-release-published == 'true'
       run: ./node_modules/.bin/replace '<base href=(.*?)>' '<base href="/${{ github.event.repository.name }}/">' www/index.html
     
     - name: Set build (run) number
       run: ./node_modules/.bin/replace '##BUILD_NUMBER##' '${{ github.run_number }}' www/index.html
     
-    - name: Set version number
-      if: steps.semantic.outputs.new-release-published == 'true'
-      run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.semantic.outputs.release-version }}' www/index.html
+    - name: Get last release
+    # if: steps.semantic.outputs.new-release-published !== 'true'
+      id: version
+      uses: abatilo/release-info-action@v1.1.0
+      with:
+        owner: sebgroup
+        repo: magic-iframe
       
-    - name: Set version number
-      if: steps.semantic.outputs.new-release-published == 'false'
+    - name: Set version number after release
+      if: steps.semantic.outputs.new-release-published === 'true'
+      run: ./node_modules/.bin/replace '##VERSION##' 'v${{ steps.semantic.outputs.release-version }}' www/index.html
+      
+    - name: Set version number no release
+      if: steps.semantic.outputs.new-release-published !== 'true'
       run: ./node_modules/.bin/replace '##VERSION##' '${{ steps.version.outputs.latest_tag }}' www/index.html
-        
+    
+    - name: Get last version
+      run: echo "The last release was ${{ steps.version.outputs.latest_tag }}"  
+          
     - name: Deploy documentation to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.4.1
       with:
