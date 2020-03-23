@@ -1,4 +1,4 @@
-SEB Magic Iframe
+#SEB Magic Iframe
 
 ![CI](https://github.com/sebgroup/magic-iframe/workflows/CI/badge.svg?branch=master)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
