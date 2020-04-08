@@ -93,12 +93,11 @@ export class SebMagicIframe {
    *
    */
   @Watch('source')
-  sourceChangeHandler(newValue: boolean, oldValue: boolean) {
-    if(newValue !== oldValue){
+  sourceChangeHandler(newValue: string, oldValue: string) {
+    if(newValue.split('?')[0] !== oldValue.split('?')[0]){
       this.loaded = false;
-      if(this.reloadOnChange) {
-        this.iframe.contentDocument.location.reload();
-      }
+    } else if(this.reloadOnChange && newValue !== oldValue) {
+      setTimeout(()=>this.iframe.contentDocument.location.reload(),200);
     }
   }
 
