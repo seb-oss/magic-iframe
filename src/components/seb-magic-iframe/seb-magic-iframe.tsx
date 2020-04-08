@@ -79,6 +79,11 @@ export class SebMagicIframe {
   @Prop() maxHeight: string = '10000vh';
 
   /**
+   * Force reload of iframe when source changes, useful for SPA:s that won't refresh otherwise.
+   */
+  @Prop() reloadOnChange: boolean = false;
+
+  /**
    * Print debug log (console log).
    */
   @Prop() debug: boolean = false;
@@ -89,7 +94,12 @@ export class SebMagicIframe {
    */
   @Watch('source')
   sourceChangeHandler(newValue: boolean, oldValue: boolean) {
-    if(newValue !== oldValue){ this.loaded = false; }
+    if(newValue !== oldValue){
+      this.loaded = false;
+      if(this.reloadOnChange) {
+        this.iframe.contentDocument.location.reload();
+      }
+    }
   }
 
   @Watch('scaleContent')

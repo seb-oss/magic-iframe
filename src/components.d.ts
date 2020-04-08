@@ -34,6 +34,10 @@ export namespace Components {
     */
     'minWidth': string;
     /**
+    * Force reload of iframe when source changes, useful for SPA:s that won't refresh otherwise.
+    */
+    'reloadOnChange': boolean;
+    /**
     * Debounce time in milliseconds for resize event.
     */
     'resizeDebounce': number;
@@ -103,6 +107,10 @@ declare namespace LocalJSX {
     * Listen to events emitted by magic iframe e.g. <pre> const magicIframe = document.getElementById('magicIframe');<br> magicIframe.addEventListener('magicIframeEvent', $event => console.log($event.detail)); </pre>
     */
     'onMagicIframeEvent'?: (event: CustomEvent<MagicIframeEvent>) => void;
+    /**
+    * Force reload of iframe when source changes, useful for SPA:s that won't refresh otherwise.
+    */
+    'reloadOnChange'?: boolean;
     /**
     * Debounce time in milliseconds for resize event.
     */
