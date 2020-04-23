@@ -28,7 +28,8 @@
     "generate": "stencil generate",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
-    "replace-local-test": "replace \"<base href=(.*?)>\" \"<base href='/magic-iframe/'>\" www/index.html"
+    "replace-local-test": "replace \"<base href=(.*?)>\" \"<base href='/magic-iframe/'>\" www/index.html",
+    "package-lock-sanitizer": "package-lock-sanitizer"
   },
   "commitlint": {
     "extends": [
@@ -37,6 +38,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npm run package-lock-sanitizer && git add package-lock.json",
       "commit-msg": "commitlint --edit"
     }
   },
@@ -50,6 +52,7 @@
     "husky": "^4.2.5",
     "node-sass": "^4.13.1",
     "node-sass-tilde-importer": "^1.0.2",
+    "package-lock-sanitizer": "^1.0.1",
     "replace": "^1.1.5",
     "semantic-release": "^17.0.7"
   },
