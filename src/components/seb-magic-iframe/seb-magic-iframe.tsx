@@ -94,7 +94,8 @@ export class SebMagicIframe {
    */
   @Watch('source')
   sourceChangeHandler(newValue: string, oldValue: string) {
-    if(newValue.split('?')[0] !== oldValue.split('?')[0]){
+    // if url without parameters have changed or new value is set and old value is undefined...
+    if(newValue && oldValue && newValue.split('?')[0] !== oldValue.split('?')[0] || newValue && !oldValue){
       this.loaded = false;
     } else if(this.reloadOnChange && newValue !== oldValue) {
       setTimeout(()=>this.iframe.contentDocument.location.reload(),200);
