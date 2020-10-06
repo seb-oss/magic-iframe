@@ -543,7 +543,7 @@ export class SebMagicIframe {
     }
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     this.magicIframeEventHandler({ event: 'iframe-removed', details: this.iframe});
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
