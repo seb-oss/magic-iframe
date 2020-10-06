@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { MagicIframeEvent, } from "./components/seb-magic-iframe/seb-magic-iframe-event.interface";
+import { MagicIframeEvent } from "./components/seb-magic-iframe/seb-magic-iframe-event.interface";
 export namespace Components {
     interface SebMagicIframe {
         /**
@@ -19,7 +19,7 @@ export namespace Components {
         /**
           * Set width of magic iframe to width of iframe content, useful when iframing fixed width pages.
          */
-        "matchContentWidth": boolean | "auto";
+        "matchContentWidth": boolean | 'auto';
         /**
           * Prevent the iframe from growing infinitely by setting a max height i.e. prevent infinite loop for height value when iframe content height depends on container height.
          */
@@ -86,7 +86,7 @@ declare namespace LocalJSX {
         /**
           * Set width of magic iframe to width of iframe content, useful when iframing fixed width pages.
          */
-        "matchContentWidth"?: boolean | "auto";
+        "matchContentWidth"?: boolean | 'auto';
         /**
           * Prevent the iframe from growing infinitely by setting a max height i.e. prevent infinite loop for height value when iframe content height depends on container height.
          */

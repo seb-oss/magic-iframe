@@ -2,6 +2,13 @@ import { Config } from '@stencil/core';
 
 export const config: Config = {
   namespace: 'magic-iframe',
+  buildEs5: 'prod',
+  extras: {
+    cssVarsShim: true,
+    dynamicImportShim: true,
+    safari10: true,
+    shadowDomShim: true,
+  },
   outputTargets: [
     {
       type: 'dist',

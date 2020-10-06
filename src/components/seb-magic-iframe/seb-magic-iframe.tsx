@@ -292,7 +292,12 @@ export class SebMagicIframe {
       .subscribe(($event: Event) => {
         this.loaded = false;
         this.iframe.style.visibility = 'hidden';
-        this.iframe.contentDocument.body.style.overflow = 'hidden';
+        try {
+          // suppress IE error when element has been removed from DOM
+          this.iframe.contentDocument.body.style.overflow = 'hidden'
+        } catch (_) {
+          // do nothing
+        }
         this.magicIframeEventHandler({ event: 'iframe-unloaded', details: $event });
       });
   }
@@ -538,7 +543,7 @@ export class SebMagicIframe {
     }
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     this.magicIframeEventHandler({ event: 'iframe-removed', details: this.iframe});
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
