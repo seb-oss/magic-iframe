@@ -54,7 +54,7 @@
     "node-sass-tilde-importer": "^1.0.2",
     "package-lock-sanitizer": "^1.0.1",
     "replace": "^1.2.0",
-    "semantic-release": "^17.1.2"
+    "semantic-release": "^19.0.3"
   },
   "dependencies": {
     "@braintree/sanitize-url": "^5.0.0",
